@@ -5,6 +5,8 @@ import FaqAccordion from "../components/FaqAccordion";
 import WidgetCapture from "./widgetCapture";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Loader2 } from "lucide-react";
 
 const Status = () => {
   const [searchParams] = useSearchParams();
@@ -12,6 +14,9 @@ const Status = () => {
   const [selectedDocId, setSelectedDocId] = useState("");
   const [docId, setDocId] = useState("");
   const [error, setError] = useState("");
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [apiResponse, setApiResponse] = useState<any>(null);
 
   useEffect(() => {
     // Check for URN parameter in URL (keeping for backward compatibility)
@@ -40,6 +45,9 @@ const Status = () => {
     }
     
     setError("");
+    setIsPopupOpen(true);
+    setIsLoading(true);
+    setApiResponse(null);
     
     try {
       const response = await fetch('https://api.dirolabs.com/v3/extract-balance', {
@@ -61,11 +69,14 @@ const Status = () => {
 
       const data = await response.json();
       console.log('API Response:', data);
+      setApiResponse(data);
       
-      handleDocIdSubmit(docId);
     } catch (error) {
       console.error('Error calling API:', error);
       setError("Failed to fetch balance. Please try again.");
+      setIsPopupOpen(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -159,6 +170,90 @@ const Status = () => {
           </div>
         </div>
       </main>
+
+      {/* API Response Popup */}
+      <Dialog open={isPopupOpen} onOpenChange={setIsPopupOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Balance Information</DialogTitle>
+          </DialogHeader>
+          
+          {isLoading ? (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <span className="ml-2 text-gray-600">Loading balance information...</span>
+            </div>
+          ) : apiResponse ? (
+            <div className="space-y-4">
+              {/* Requested Date on top */}
+              {apiResponse.requestedDate && (
+                <div className="text-center py-3 bg-gray-50 rounded-lg">
+                  <span className="text-sm text-gray-600">Requested Date</span>
+                  <p className="text-lg font-semibold text-gray-800">{apiResponse.requestedDate}</p>
+                </div>
+              )}
+              
+              {/* Balance details table */}
+              <div className="border rounded-lg overflow-hidden">
+                <table className="w-full">
+                  <tbody className="divide-y divide-gray-200">
+                    {apiResponse.currency && (
+                      <tr>
+                        <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Currency</td>
+                        <td className="px-4 py-3 text-sm text-gray-800">{apiResponse.currency}</td>
+                      </tr>
+                    )}
+                    {apiResponse.accountNumber && (
+                      <tr>
+                        <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Account Number</td>
+                        <td className="px-4 py-3 text-sm text-gray-800">{apiResponse.accountNumber}</td>
+                      </tr>
+                    )}
+                    {apiResponse.confidence && (
+                      <tr>
+                        <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Confidence</td>
+                        <td className="px-4 py-3 text-sm">
+                          <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                            apiResponse.confidence === 'High' ? 'bg-green-100 text-green-800' :
+                            apiResponse.confidence === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-red-100 text-red-800'
+                          }`}>
+                            {apiResponse.confidence}
+                          </span>
+                        </td>
+                      </tr>
+                    )}
+                    {apiResponse.balanceOnDate !== undefined && (
+                      <tr>
+                        <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Balance on Date</td>
+                        <td className="px-4 py-3 text-sm font-semibold text-gray-800">
+                          {apiResponse.currency ? `${apiResponse.currency} ` : ''}
+                          {typeof apiResponse.balanceOnDate === 'number' ? 
+                            apiResponse.balanceOnDate.toLocaleString() : 
+                            apiResponse.balanceOnDate}
+                        </td>
+                      </tr>
+                    )}
+                    {apiResponse.message && (
+                      <tr>
+                        <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Status</td>
+                        <td className="px-4 py-3 text-sm">
+                          <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                            apiResponse.message === 'Success!' ? 'bg-green-100 text-green-800' :
+                            'bg-gray-100 text-gray-800'
+                          }`}>
+                            {apiResponse.message}
+                          </span>
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ) : null}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
