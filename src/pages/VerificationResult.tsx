@@ -149,9 +149,9 @@ const VerificationResult = () => {
             </p>
             
             <p className="text-gray-600 mb-6">
-              Wolters Kluwer partners with <a href="#" className="text-vfs-blue hover:underline">DIRO</a> for this process, 
+              Wolters Kluwer partners with <a href="https://diro.io/" target="_blank" rel="noopener noreferrer" className="text-vfs-blue hover:underline">DIRO</a> for this process, 
               the leading provider of bank verification solutions trusted by F500 and international financial institutions. Visit 
-              DIRO <a href="#" className="text-vfs-blue hover:underline">Trust Center</a>.
+              DIRO <a href="https://trust.diro.io/" target="_blank" rel="noopener noreferrer" className="text-vfs-blue hover:underline">Trust Center</a>.
             </p>
           </div>
           
@@ -202,12 +202,12 @@ const VerificationResult = () => {
             
             <div className="mt-8">
               <p className="text-gray-600">
-                Learn more about DIRO's <a href="#" className="text-vfs-blue hover:underline">bank</a> verification solutions.
+                Learn more about DIRO's <a href="https://diro.io/products/balance-and-transaction-confirmation/" target="_blank" rel="noopener noreferrer" className="text-vfs-blue hover:underline">balance confirmation</a> solution.
               </p>
-              
+
               <div className="mt-4">
-                <a href="#" className="text-vfs-blue hover:underline mr-4">Terms of Use</a>
-                <a href="#" className="text-vfs-blue hover:underline">Privacy Policy</a>
+                <a href="https://diro.io/term-condition/" target="_blank" rel="noopener noreferrer" className="text-vfs-blue hover:underline mr-4">Terms of Use</a>
+                <a href="https://diro.io/privacy-policy/" target="_blank" rel="noopener noreferrer" className="text-vfs-blue hover:underline">Privacy Policy</a>
               </div>
             </div>
           </div>

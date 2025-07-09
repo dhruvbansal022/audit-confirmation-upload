@@ -40,12 +40,12 @@ const Index = () => {
 
             <p className="text-gray-600 mb-6 text-justify leading-relaxed">
               We partner with{" "}
-              <a href="#" className="text-vfs-blue hover:underline font-medium">
+              <a href="https://diro.io/" target="_blank" rel="noopener noreferrer" className="text-vfs-blue hover:underline font-medium">
                 DIRO
               </a>
               —the global leader in real-time balance confirmations from any online banking source. Trusted by top CPA firms, F500, and 
               international financial institutions. Visit the{" "}
-              <a href="#" className="text-vfs-blue hover:underline font-medium">
+              <a href="https://trust.diro.io/" target="_blank" rel="noopener noreferrer" className="text-vfs-blue hover:underline font-medium">
                 DIRO Trust Center
               </a>
               .
@@ -54,17 +54,17 @@ const Index = () => {
             <div className="mt-auto">
               <p className="text-gray-600 mb-4">
                 Learn more about DIRO's{" "}
-                <a href="https://diro.io/products/balance-and-transaction-confirmation/" className="text-vfs-blue hover:underline font-medium">
+                <a href="https://diro.io/products/balance-and-transaction-confirmation/" target="_blank" rel="noopener noreferrer" className="text-vfs-blue hover:underline font-medium">
                   balance confirmation
                 </a>{" "}
                 solution.
               </p>
 
               <div className="flex gap-4">
-                <a href="#" className="text-vfs-blue hover:underline font-medium">
+                <a href="https://diro.io/term-condition/" target="_blank" rel="noopener noreferrer" className="text-vfs-blue hover:underline font-medium">
                   Terms of Use
                 </a>
-                <a href="#" className="text-vfs-blue hover:underline font-medium">
+                <a href="https://diro.io/privacy-policy/" target="_blank" rel="noopener noreferrer" className="text-vfs-blue hover:underline font-medium">
                   Privacy Policy
                 </a>
               </div>
