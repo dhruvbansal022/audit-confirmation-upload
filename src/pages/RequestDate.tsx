@@ -6,13 +6,29 @@ import WidgetCapture from "./widgetCapture";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Loader2 } from "lucide-react";
+import { Loader2, CalendarIcon } from "lucide-react";
 import { format, parse } from "date-fns";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 const RequestDate = () => {
   const [searchParams] = useSearchParams();
   const [showWidget, setShowWidget] = useState(false);
   const [selectedDocId, setSelectedDocId] = useState("");
   const [docId, setDocId] = useState("");
+  const [date, setDate] = useState<Date>();
+  const [dateOpen, setDateOpen] = useState(false);
   const [error, setError] = useState("");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -39,10 +55,18 @@ const RequestDate = () => {
       setError("Please enter a valid Doc ID");
       return;
     }
+    if (!date) {
+      setError("Please select a date");
+      return;
+    }
     setError("");
     setIsPopupOpen(true);
     setIsLoading(true);
     setApiResponse(null);
+    
+    // Format date as YYYYMMDD
+    const formattedDate = format(date, 'yyyyMMdd');
+    
     try {
       const response = await fetch('https://api.dirolabs.com/v3/extract-balance', {
         method: 'POST',
@@ -53,7 +77,7 @@ const RequestDate = () => {
         },
         body: JSON.stringify({
           docid: docId,
-          requestedDate: ""
+          requestedDate: formattedDate
         })
       });
       if (!response.ok) {
@@ -120,11 +144,49 @@ const RequestDate = () => {
           <div className="flex flex-col items-center">
             <div className="w-full max-w-md p-6 border border-gray-200 rounded-lg shadow-sm bg-white">
               {!showWidget ? <>
-                  <h2 className="font-medium text-gray-800 mb-4 text-lg">Enter Doc ID</h2>
-                  <p className="text-gray-600 mb-6 text-sm leading-relaxed">Please enter the Doc ID to fetch the balance.</p>
+                  <h2 className="font-medium text-gray-800 mb-4 text-lg">Enter Doc ID & Select Date</h2>
+                  <p className="text-gray-600 mb-6 text-sm leading-relaxed">Please enter the Doc ID and select the date to fetch the balance.</p>
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-2">
-                      <Input type="text" value={docId} onChange={e => setDocId(e.target.value)} placeholder="Enter Doc ID" className={`h-12 ${error ? "border-red-500" : "border-gray-300"}`} />
+                      <Input 
+                        type="text" 
+                        value={docId} 
+                        onChange={e => setDocId(e.target.value)} 
+                        placeholder="Enter Doc ID" 
+                        className={`h-12 ${error && !date ? "border-red-500" : "border-gray-300"}`} 
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Popover open={dateOpen} onOpenChange={setDateOpen}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className={cn(
+                              "w-full h-12 justify-start text-left font-normal border-gray-300 hover:border-gray-300 hover:bg-white",
+                              !date && "text-muted-foreground",
+                              error && !docId.trim() && "border-red-500"
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {date ? format(date, "PPP") : <span>Select a date</span>}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={date}
+                            onSelect={(selectedDate) => {
+                              setDate(selectedDate);
+                              if (selectedDate) {
+                                setDateOpen(false);
+                              }
+                            }}
+                            initialFocus
+                            className="p-3 pointer-events-auto"
+                          />
+                        </PopoverContent>
+                      </Popover>
                       {error && <p className="text-red-500 text-sm">{error}</p>}
                     </div>
                     
