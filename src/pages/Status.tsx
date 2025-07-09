@@ -59,7 +59,7 @@ const Status = () => {
         },
         body: JSON.stringify({
           docid: docId,
-          requestedDate: ""
+          requestedDate: "2025/06/30"
         })
       });
 
