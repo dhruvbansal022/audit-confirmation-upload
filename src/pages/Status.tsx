@@ -183,6 +183,16 @@ const Status = () => {
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
               <span className="ml-2 text-gray-600">Loading balance information...</span>
             </div>
+          ) : apiResponse?.message === "Processing" || apiResponse?.status === "processing" ? (
+            <div className="flex flex-col items-center justify-center py-8 space-y-4">
+              <div className="flex items-center">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                <span className="ml-2 text-gray-600">Processing your request...</span>
+              </div>
+              <p className="text-sm text-gray-500 text-center">
+                Your balance information is being processed. This may take a few moments.
+              </p>
+            </div>
           ) : apiResponse ? (
             <div className="space-y-4">
               {/* Requested Date on top */}
