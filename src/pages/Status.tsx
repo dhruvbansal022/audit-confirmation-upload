@@ -282,10 +282,65 @@ const Status = () => {
                             </tr>
                           )}
                           
+                          {/* Handle Account Details specifically */}
+                          {transactionData.accountDetails && Array.isArray(transactionData.accountDetails) && (
+                            <tr>
+                              <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Account Details</td>
+                              <td className="px-4 py-3">
+                                <div className="border rounded-lg overflow-hidden">
+                                  <table className="w-full">
+                                    <tbody className="divide-y divide-gray-100">
+                                      {transactionData.accountDetails.map((account: any, index: number) => (
+                                        <React.Fragment key={index}>
+                                          {account.accountNumber && (
+                                            <tr>
+                                              <td className="px-3 py-2 text-xs font-medium text-gray-500 bg-gray-25">Account Number</td>
+                                              <td className="px-3 py-2 text-xs text-gray-700">{account.accountNumber}</td>
+                                            </tr>
+                                          )}
+                                          {account.balanceOnDate !== undefined && (
+                                            <tr>
+                                              <td className="px-3 py-2 text-xs font-medium text-gray-500 bg-gray-25">Balance On Date</td>
+                                              <td className="px-3 py-2 text-xs text-gray-700">
+                                                {typeof account.balanceOnDate === 'number' ? 
+                                                  account.balanceOnDate.toLocaleString() : 
+                                                  account.balanceOnDate}
+                                              </td>
+                                            </tr>
+                                          )}
+                                          {account.currency && (
+                                            <tr>
+                                              <td className="px-3 py-2 text-xs font-medium text-gray-500 bg-gray-25">Currency</td>
+                                              <td className="px-3 py-2 text-xs text-gray-700">{account.currency}</td>
+                                            </tr>
+                                          )}
+                                          {account.confidence && (
+                                            <tr>
+                                              <td className="px-3 py-2 text-xs font-medium text-gray-500 bg-gray-25">Confidence</td>
+                                              <td className="px-3 py-2 text-xs">
+                                                <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                                                  account.confidence === 'High' ? 'bg-green-100 text-green-800' :
+                                                  account.confidence === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                                                  'bg-red-100 text-red-800'
+                                                }`}>
+                                                  {account.confidence}
+                                                </span>
+                                              </td>
+                                            </tr>
+                                          )}
+                                        </React.Fragment>
+                                      ))}
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </td>
+                            </tr>
+                          )}
+
                           {/* Show any additional fields that might be in the response */}
                           {Object.entries(transactionData).map(([key, value]) => {
                             // Skip already displayed fields and error field
-                            if (['requestedDate', 'currency', 'accountNumber', 'confidence', 'balanceOnDate', 'error'].includes(key)) {
+                            if (['requestedDate', 'currency', 'accountNumber', 'confidence', 'balanceOnDate', 'error', 'accountDetails'].includes(key)) {
                               return null;
                             }
                             if (value !== undefined && value !== null && value !== '') {
