@@ -114,9 +114,10 @@ const WidgetDemo = forwardRef<WidgetRefMethods, WidgetCaptureProps>(({ urn }, re
         containerRef.current.appendChild(widgetContainer);
       }
 
+      const formattedDate = urn ? urn.replace(/-/g, '/') : '';
       const targetUrl = urn
-        ? `https://verification.diro.io/?buttonid=O.c117bd44-8cfa-42df-99df-c4ad2ba6c6f5-48sB&trackid=${urn}`
-        : "https://verification.diro.io/?buttonid=O.c117bd44-8cfa-42df-99df-c4ad2ba6c6f5-48sB&trackid=";
+        ? `https://verification.diro.io/?buttonid=O.c117bd44-8cfa-42df-99df-c4ad2ba6c6f5-48sB&balanceOnDate=${formattedDate}`
+        : "https://verification.diro.io/?buttonid=O.c117bd44-8cfa-42df-99df-c4ad2ba6c6f5-48sB&balanceOnDate=";
 
       (window as any).initializeDiroWidget(widgetContainer, {
         targetUrl: targetUrl,
