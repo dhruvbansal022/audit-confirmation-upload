@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Loader2 } from "lucide-react";
 import { format, parse } from "date-fns";
-
 const Status = () => {
   const [searchParams] = useSearchParams();
   const [showWidget, setShowWidget] = useState(false);
@@ -18,7 +17,6 @@ const Status = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [apiResponse, setApiResponse] = useState<any>(null);
-
   useEffect(() => {
     // Check for URN parameter in URL (keeping for backward compatibility)
     const urlUrn = searchParams.get("URN");
@@ -29,27 +27,22 @@ const Status = () => {
       setShowWidget(true);
     }
   }, [searchParams]);
-
   const handleDocIdSubmit = (submittedDocId: string) => {
     console.log("Doc ID submitted:", submittedDocId);
     sessionStorage.setItem("userDate", submittedDocId);
     setSelectedDocId(submittedDocId);
     setShowWidget(true);
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!docId.trim()) {
       setError("Please enter a valid Doc ID");
       return;
     }
-    
     setError("");
     setIsPopupOpen(true);
     setIsLoading(true);
     setApiResponse(null);
-    
     try {
       const response = await fetch('https://api.dirolabs.com/v3/extract-balance', {
         method: 'POST',
@@ -63,15 +56,12 @@ const Status = () => {
           requestedDate: "2025/03/21"
         })
       });
-
       if (!response.ok) {
         throw new Error(`API call failed: ${response.status}`);
       }
-
       const data = await response.json();
       console.log('API Response:', data);
       setApiResponse(data);
-      
     } catch (error) {
       console.error('Error calling API:', error);
       setError("Failed to fetch balance. Please try again.");
@@ -80,9 +70,7 @@ const Status = () => {
       setIsLoading(false);
     }
   };
-
-  return (
-    <div className="min-h-screen bg-gray-50">
+  return <div className="min-h-screen bg-gray-50">
       <header className="border-b border-gray-200 py-4 bg-white">
         <div className="container mx-auto px-4">
           <WoltersKluwerLogo />
@@ -131,21 +119,14 @@ const Status = () => {
           
           <div className="flex flex-col items-center">
             <div className="w-full max-w-md p-6 border border-gray-200 rounded-lg shadow-sm bg-white">
-              {!showWidget ? (
-                <>
+              {!showWidget ? <>
                   <h2 className="font-medium text-gray-800 mb-4 text-lg">Enter Doc ID</h2>
                   <p className="text-gray-600 mb-6 text-sm leading-relaxed">
                     Please enter your Doc ID to fetch your balance.
                   </p>
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-2">
-                      <Input 
-                        type="text"
-                        value={docId}
-                        onChange={(e) => setDocId(e.target.value)}
-                        placeholder="Enter Doc ID"
-                        className={`h-12 ${error ? "border-red-500" : "border-gray-300"}`}
-                      />
+                      <Input type="text" value={docId} onChange={e => setDocId(e.target.value)} placeholder="Enter Doc ID" className={`h-12 ${error ? "border-red-500" : "border-gray-300"}`} />
                       {error && <p className="text-red-500 text-sm">{error}</p>}
                     </div>
                     
@@ -153,16 +134,13 @@ const Status = () => {
                       Fetch balance
                     </Button>
                   </form>
-                </>
-              ) : (
-                <>
+                </> : <>
                   <h2 className="font-medium text-gray-800 mb-4 text-lg">Fetch your balance</h2>
                   <p className="text-gray-600 mb-6 text-sm leading-relaxed">Please select your bank to proceed.</p>
                   <div className="flex flex-col align-center gap-4">
                     <WidgetCapture urn={selectedDocId} />
                   </div>
-                </>
-              )}
+                </>}
             </div>
           </div>
 
@@ -176,16 +154,13 @@ const Status = () => {
       <Dialog open={isPopupOpen} onOpenChange={setIsPopupOpen}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle>Balance Information</DialogTitle>
+            <DialogTitle>Balance confirmation</DialogTitle>
           </DialogHeader>
           
-          {isLoading ? (
-            <div className="flex items-center justify-center py-8">
+          {isLoading ? <div className="flex items-center justify-center py-8">
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
               <span className="ml-2 text-gray-600">Loading balance information...</span>
-            </div>
-          ) : apiResponse?.message === "Processing" || apiResponse?.status === "processing" ? (
-            <div className="flex flex-col items-center justify-center py-8 space-y-4">
+            </div> : apiResponse?.message === "Processing" || apiResponse?.status === "processing" ? <div className="flex flex-col items-center justify-center py-8 space-y-4">
               <div className="flex items-center">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
                 <span className="ml-2 text-gray-600">Processing your request...</span>
@@ -193,170 +168,124 @@ const Status = () => {
               <p className="text-sm text-gray-500 text-center">
                 Your balance information is being processed. This may take a few moments.
               </p>
-            </div>
-          ) : apiResponse ? (
-            <div className="space-y-4">
+            </div> : apiResponse ? <div className="space-y-4">
               {/* Extract data from the nested response structure */}
               {(() => {
-                // Handle nested response structure like { "data": [{ "transactionData": {...}, "message": "..." }] }
-                const responseData = apiResponse.data?.[0] || apiResponse;
-                const transactionData = responseData.transactionData || responseData;
-                const message = responseData.message || apiResponse.message;
-                
-                // Format the requested date
-                const formatRequestedDate = (dateStr: string) => {
-                  try {
-                    // Parse the date in YYYY/MM/DD format
-                    const parsedDate = parse(dateStr, 'yyyy/MM/dd', new Date());
-                    // Format it as "Month DDth, YYYY"
-                    return format(parsedDate, 'MMMM do, yyyy');
-                  } catch (error) {
-                    // If parsing fails, return the original string
-                    return dateStr;
-                  }
-                };
-                
-                return (
-                  <>
+            // Handle nested response structure like { "data": [{ "transactionData": {...}, "message": "..." }] }
+            const responseData = apiResponse.data?.[0] || apiResponse;
+            const transactionData = responseData.transactionData || responseData;
+            const message = responseData.message || apiResponse.message;
+
+            // Format the requested date
+            const formatRequestedDate = (dateStr: string) => {
+              try {
+                // Parse the date in YYYY/MM/DD format
+                const parsedDate = parse(dateStr, 'yyyy/MM/dd', new Date());
+                // Format it as "Month DDth, YYYY"
+                return format(parsedDate, 'MMMM do, yyyy');
+              } catch (error) {
+                // If parsing fails, return the original string
+                return dateStr;
+              }
+            };
+            return <>
                     {/* Requested Date on top */}
-                    {transactionData.requestedDate && (
-                      <div className="text-center py-3 bg-gray-50 rounded-lg">
+                    {transactionData.requestedDate && <div className="text-center py-3 bg-gray-50 rounded-lg">
                         <span className="text-sm text-gray-600">Requested Date</span>
                         <p className="text-lg font-semibold text-gray-800">{formatRequestedDate(transactionData.requestedDate)}</p>
-                      </div>
-                    )}
+                      </div>}
                     
                     {/* Balance details table */}
                     <div className="border rounded-lg overflow-hidden">
                       <table className="w-full">
                         <tbody className="divide-y divide-gray-200">
-                          {transactionData.currency && (
-                            <tr>
+                          {transactionData.currency && <tr>
                               <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Currency</td>
                               <td className="px-4 py-3 text-sm text-gray-800">{transactionData.currency}</td>
-                            </tr>
-                          )}
-                          {transactionData.accountNumber && (
-                            <tr>
+                            </tr>}
+                          {transactionData.accountNumber && <tr>
                               <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Account Number</td>
                               <td className="px-4 py-3 text-sm text-gray-800">{transactionData.accountNumber}</td>
-                            </tr>
-                          )}
-                          {transactionData.confidence && (
-                            <tr>
+                            </tr>}
+                          {transactionData.confidence && <tr>
                               <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Confidence</td>
                               <td className="px-4 py-3 text-sm">
-                                <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                                  transactionData.confidence === 'High' ? 'bg-green-100 text-green-800' :
-                                  transactionData.confidence === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
-                                  'bg-red-100 text-red-800'
-                                }`}>
+                                <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${transactionData.confidence === 'High' ? 'bg-green-100 text-green-800' : transactionData.confidence === 'Medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}`}>
                                   {transactionData.confidence}
                                 </span>
                               </td>
-                            </tr>
-                          )}
-                          {transactionData.balanceOnDate !== undefined && (
-                            <tr>
+                            </tr>}
+                          {transactionData.balanceOnDate !== undefined && <tr>
                               <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Balance on Date</td>
                               <td className="px-4 py-3 text-sm font-semibold text-gray-800">
                                 {transactionData.currency ? `${transactionData.currency} ` : ''}
-                                {typeof transactionData.balanceOnDate === 'number' ? 
-                                  transactionData.balanceOnDate.toLocaleString() : 
-                                  transactionData.balanceOnDate}
+                                {typeof transactionData.balanceOnDate === 'number' ? transactionData.balanceOnDate.toLocaleString() : transactionData.balanceOnDate}
                               </td>
-                            </tr>
-                          )}
-                          {message && (
-                            <tr>
+                            </tr>}
+                          {message && <tr>
                               <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Message</td>
                               <td className="px-4 py-3 text-sm">
-                                <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                                  message === 'Success!' ? 'bg-green-100 text-green-800' :
-                                  message.includes('not present') ? 'bg-yellow-100 text-yellow-800' :
-                                  'bg-gray-100 text-gray-800'
-                                }`}>
+                                <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${message === 'Success!' ? 'bg-green-100 text-green-800' : message.includes('not present') ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800'}`}>
                                   {message}
                                 </span>
                               </td>
-                            </tr>
-                          )}
+                            </tr>}
                           
                           {/* Handle Account Details specifically */}
-                          {transactionData.accountDetails && Array.isArray(transactionData.accountDetails) && (
-                            <tr>
+                          {transactionData.accountDetails && Array.isArray(transactionData.accountDetails) && <tr>
                               <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Account Details</td>
                               <td className="px-4 py-3">
                                 <div className="border rounded-lg overflow-hidden">
                                   <table className="w-full">
                                     <tbody className="divide-y divide-gray-100">
-                                      {transactionData.accountDetails.map((account: any, index: number) => (
-                                        <React.Fragment key={index}>
-                                          {account.accountNumber && (
-                                            <tr>
+                                      {transactionData.accountDetails.map((account: any, index: number) => <React.Fragment key={index}>
+                                          {account.accountNumber && <tr>
                                               <td className="px-3 py-2 text-xs font-medium text-gray-500 bg-gray-25">Account Number</td>
                                               <td className="px-3 py-2 text-xs text-gray-700">{account.accountNumber}</td>
-                                            </tr>
-                                          )}
-                                          {account.balanceOnDate !== undefined && (
-                                            <tr>
+                                            </tr>}
+                                          {account.balanceOnDate !== undefined && <tr>
                                               <td className="px-3 py-2 text-xs font-medium text-gray-500 bg-gray-25">Balance On Date</td>
                                               <td className="px-3 py-2 text-xs text-gray-700">
-                                                {typeof account.balanceOnDate === 'number' ? 
-                                                  account.balanceOnDate.toLocaleString() : 
-                                                  account.balanceOnDate}
+                                                {typeof account.balanceOnDate === 'number' ? account.balanceOnDate.toLocaleString() : account.balanceOnDate}
                                               </td>
-                                            </tr>
-                                          )}
-                                          {account.currency && (
-                                            <tr>
+                                            </tr>}
+                                          {account.currency && <tr>
                                               <td className="px-3 py-2 text-xs font-medium text-gray-500 bg-gray-25">Currency</td>
                                               <td className="px-3 py-2 text-xs text-gray-700">{account.currency}</td>
-                                            </tr>
-                                          )}
-                                          {account.confidence && (
-                                            <tr>
+                                            </tr>}
+                                          {account.confidence && <tr>
                                               <td className="px-3 py-2 text-xs font-medium text-gray-500 bg-gray-25">Confidence</td>
                                               <td className="px-3 py-2 text-xs">
-                                                <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                                                  account.confidence === 'High' ? 'bg-green-100 text-green-800' :
-                                                  account.confidence === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
-                                                  'bg-red-100 text-red-800'
-                                                }`}>
+                                                <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${account.confidence === 'High' ? 'bg-green-100 text-green-800' : account.confidence === 'Medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}`}>
                                                   {account.confidence}
                                                 </span>
                                               </td>
-                                            </tr>
-                                          )}
-                                        </React.Fragment>
-                                      ))}
+                                            </tr>}
+                                        </React.Fragment>)}
                                     </tbody>
                                   </table>
                                 </div>
                               </td>
-                            </tr>
-                          )}
+                            </tr>}
 
                           {/* Show any additional fields that might be in the response */}
                           {Object.entries(transactionData).map(([key, value]) => {
-                            // Skip already displayed fields and error field
-                            if (['requestedDate', 'currency', 'accountNumber', 'confidence', 'balanceOnDate', 'error', 'accountDetails'].includes(key)) {
-                              return null;
-                            }
-                            if (value !== undefined && value !== null && value !== '') {
-                              return (
-                                <tr key={key}>
+                      // Skip already displayed fields and error field
+                      if (['requestedDate', 'currency', 'accountNumber', 'confidence', 'balanceOnDate', 'error', 'accountDetails'].includes(key)) {
+                        return null;
+                      }
+                      if (value !== undefined && value !== null && value !== '') {
+                        return <tr key={key}>
                                   <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50 capitalize">
                                     {key.replace(/([A-Z])/g, ' $1').toLowerCase()}
                                   </td>
                                   <td className="px-4 py-3 text-sm text-gray-800">
                                     {typeof value === 'object' ? JSON.stringify(value) : String(value)}
                                   </td>
-                                </tr>
-                              );
-                            }
-                            return null;
-                          })}
+                                </tr>;
+                      }
+                      return null;
+                    })}
                         </tbody>
                       </table>
                     </div>
@@ -368,15 +297,11 @@ const Status = () => {
                         {JSON.stringify(apiResponse, null, 2)}
                       </pre>
                     </details>
-                  </>
-                );
-              })()}
-            </div>
-          ) : null}
+                  </>;
+          })()}
+            </div> : null}
         </DialogContent>
       </Dialog>
-    </div>
-  );
+    </div>;
 };
-
 export default Status;
