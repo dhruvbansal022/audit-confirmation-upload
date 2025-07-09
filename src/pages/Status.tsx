@@ -31,7 +31,7 @@ const Status = () => {
     setShowWidget(true);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!docId.trim()) {
@@ -40,7 +40,33 @@ const Status = () => {
     }
     
     setError("");
-    handleDocIdSubmit(docId);
+    
+    try {
+      const response = await fetch('https://api.dirolabs.com/v3/extract-balance', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': '1bfd958aabcec0f6c3bd5dfa47fc3c88',
+          'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkaHJ1ditkZW1vQGRpcm8uaW8iLCJhcGlrZXkiOiIxYmZkOTU4YWFiY2VjMGY2YzNiZDVkZmE0N2ZjM2M4OCJ9.K6J2BhY2g6rCdEDfgeF1KSbaoSKb7jwUFoOjkpM8oGRrLbFYvUTlBD2wpISjmBK_1-0EFAqwp5PjWPjI6x_HQw'
+        },
+        body: JSON.stringify({
+          docid: docId,
+          requestedDate: ""
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`API call failed: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('API Response:', data);
+      
+      handleDocIdSubmit(docId);
+    } catch (error) {
+      console.error('Error calling API:', error);
+      setError("Failed to fetch balance. Please try again.");
+    }
   };
 
   return (
