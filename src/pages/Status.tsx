@@ -233,10 +233,11 @@ const Status = () => {
                           {transactionData.accountDetails && Array.isArray(transactionData.accountDetails) && <tr>
                               <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Account details</td>
                               <td className="px-4 py-3">
-                                <div className="border rounded-lg overflow-hidden">
-                                  <table className="w-full">
-                                    <tbody className="divide-y divide-gray-100">
-                                      {transactionData.accountDetails.map((account: any, index: number) => <React.Fragment key={index}>
+                                <div className="space-y-3">
+                                  {transactionData.accountDetails.map((account: any, index: number) => (
+                                    <div key={index} className="border rounded-lg overflow-hidden bg-white">
+                                      <table className="w-full">
+                                        <tbody className="divide-y divide-gray-100">
                                           {account.accountNumber && <tr>
                                               <td className="px-3 py-2 text-xs font-medium text-gray-500 bg-gray-25">Account number</td>
                                               <td className="px-3 py-2 text-xs text-gray-700">{account.accountNumber}</td>
@@ -259,9 +260,10 @@ const Status = () => {
                                                 </span>
                                               </td>
                                             </tr>}
-                                        </React.Fragment>)}
-                                    </tbody>
-                                  </table>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  ))}
                                 </div>
                               </td>
                             </tr>}
