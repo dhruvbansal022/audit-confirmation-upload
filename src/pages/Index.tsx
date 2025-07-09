@@ -34,7 +34,7 @@ const Index = () => {
       <main className="container mx-auto px-4 py-8">
         <div className="grid md:grid-cols-3 gap-8">
           <div className="flex flex-col">
-            <h1 className="font-semibold text-gray-800 mb-4 text-xl">Confirm your balance in real time </h1>
+            <h1 className="font-semibold text-gray-800 mb-4 text-xl">Confirm your balance in real time for audit compliance</h1>
 
             <p className="text-gray-600 mb-6 text-justify leading-relaxed">To streamline your audit workflow and eliminate financial discrepancies, auditors require verified balance confirmations. Our secure platform delivers instant, read-only access to the exact balance your auditor needs—no paperwork, no phone calls, no waiting from banks.</p>
 
