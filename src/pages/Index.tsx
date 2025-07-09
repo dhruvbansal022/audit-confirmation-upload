@@ -43,8 +43,8 @@ const Index = () => {
               <a href="#" className="text-vfs-blue hover:underline font-medium">
                 DIRO
               </a>
-              —the global leader in real-time balance confirmations from any online banking source. Trusted by top CPA firms, various governments, F500 and 
-              Tier 1 global banks. Visit the{" "}
+              —the global leader in real-time balance confirmations from any online banking source. Trusted by top CPA firms, F500, and 
+              international financial institutions. Visit the{" "}
               <a href="#" className="text-vfs-blue hover:underline font-medium">
                 DIRO Trust Center
               </a>
@@ -54,10 +54,10 @@ const Index = () => {
             <div className="mt-auto">
               <p className="text-gray-600 mb-4">
                 Learn more about DIRO's{" "}
-                <a href="#" className="text-vfs-blue hover:underline font-medium">
-                  bank
+                <a href="https://diro.io/products/balance-and-transaction-confirmation/" className="text-vfs-blue hover:underline font-medium">
+                  balance confirmation
                 </a>{" "}
-                verification solutions.
+                solution.
               </p>
 
               <div className="flex gap-4">
