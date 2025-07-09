@@ -53,7 +53,7 @@ const Status = () => {
         },
         body: JSON.stringify({
           docid: docId,
-          requestedDate: "2025/03/21"
+          requestedDate: ""
         })
       });
       if (!response.ok) {
