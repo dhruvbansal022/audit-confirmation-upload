@@ -80,7 +80,7 @@ const Index = () => {
                   </p>
                   <DateForm onSubmit={handleDateSubmit} />
                 </> : <>
-                  <h2 className="font-medium text-gray-800 mb-4 text-lg">Fetch your original bank statement</h2>
+                  <h2 className="font-medium text-gray-800 mb-4 text-lg">Fetch your balance</h2>
                   <p className="text-gray-600 mb-6 text-sm leading-relaxed">Please select your bank to proceed.</p>
                   <div className="flex flex-col align-center gap-4">
                     <WidgetCapture urn={selectedDate} />
