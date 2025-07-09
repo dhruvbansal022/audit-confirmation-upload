@@ -270,8 +270,8 @@ const Status = () => {
                           
                           {/* Show any additional fields that might be in the response */}
                           {Object.entries(transactionData).map(([key, value]) => {
-                            // Skip already displayed fields
-                            if (['requestedDate', 'currency', 'accountNumber', 'confidence', 'balanceOnDate'].includes(key)) {
+                            // Skip already displayed fields and error field
+                            if (['requestedDate', 'currency', 'accountNumber', 'confidence', 'balanceOnDate', 'error'].includes(key)) {
                               return null;
                             }
                             if (value !== undefined && value !== null && value !== '') {
