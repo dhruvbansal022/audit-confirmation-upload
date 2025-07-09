@@ -191,7 +191,7 @@ const Status = () => {
             return <>
                     {/* Requested Date on top */}
                     {transactionData.requestedDate && <div className="text-center py-3 bg-gray-50 rounded-lg">
-                        <span className="text-sm text-gray-600">Requested Date</span>
+                        <span className="text-sm text-gray-600">Requested date</span>
                         <p className="text-lg font-semibold text-gray-800">{formatRequestedDate(transactionData.requestedDate)}</p>
                       </div>}
                     
@@ -204,7 +204,7 @@ const Status = () => {
                               <td className="px-4 py-3 text-sm text-gray-800">{transactionData.currency}</td>
                             </tr>}
                           {transactionData.accountNumber && <tr>
-                              <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Account Number</td>
+                              <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Account number</td>
                               <td className="px-4 py-3 text-sm text-gray-800">{transactionData.accountNumber}</td>
                             </tr>}
                           {transactionData.confidence && <tr>
@@ -216,7 +216,7 @@ const Status = () => {
                               </td>
                             </tr>}
                           {transactionData.balanceOnDate !== undefined && <tr>
-                              <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Balance on Date</td>
+                              <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Balance on date</td>
                               <td className="px-4 py-3 text-sm font-semibold text-gray-800">
                                 {transactionData.currency ? `${transactionData.currency} ` : ''}
                                 {typeof transactionData.balanceOnDate === 'number' ? transactionData.balanceOnDate.toLocaleString() : transactionData.balanceOnDate}
@@ -233,18 +233,18 @@ const Status = () => {
                           
                           {/* Handle Account Details specifically */}
                           {transactionData.accountDetails && Array.isArray(transactionData.accountDetails) && <tr>
-                              <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Account Details</td>
+                              <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Account details</td>
                               <td className="px-4 py-3">
                                 <div className="border rounded-lg overflow-hidden">
                                   <table className="w-full">
                                     <tbody className="divide-y divide-gray-100">
                                       {transactionData.accountDetails.map((account: any, index: number) => <React.Fragment key={index}>
                                           {account.accountNumber && <tr>
-                                              <td className="px-3 py-2 text-xs font-medium text-gray-500 bg-gray-25">Account Number</td>
+                                              <td className="px-3 py-2 text-xs font-medium text-gray-500 bg-gray-25">Account number</td>
                                               <td className="px-3 py-2 text-xs text-gray-700">{account.accountNumber}</td>
                                             </tr>}
                                           {account.balanceOnDate !== undefined && <tr>
-                                              <td className="px-3 py-2 text-xs font-medium text-gray-500 bg-gray-25">Balance On Date</td>
+                                              <td className="px-3 py-2 text-xs font-medium text-gray-500 bg-gray-25">Balance on date</td>
                                               <td className="px-3 py-2 text-xs text-gray-700">
                                                 {typeof account.balanceOnDate === 'number' ? account.balanceOnDate.toLocaleString() : account.balanceOnDate}
                                               </td>
