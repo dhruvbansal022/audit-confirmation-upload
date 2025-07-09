@@ -9,18 +9,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Loader2, CalendarIcon } from "lucide-react";
 import { format, parse } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 const RequestDate = () => {
   const [searchParams] = useSearchParams();
@@ -50,24 +40,19 @@ const RequestDate = () => {
     setSelectedDocId(submittedDocId);
     setShowWidget(true);
   };
-
   const handleMonthChange = (monthIndex: string) => {
     const newMonth = new Date(currentMonth.getFullYear(), parseInt(monthIndex), 1);
     setCurrentMonth(newMonth);
   };
-
   const handleYearChange = (year: string) => {
     const newMonth = new Date(parseInt(year), currentMonth.getMonth(), 1);
     setCurrentMonth(newMonth);
   };
-
-  const months = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ];
-
+  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 100 }, (_, i) => currentYear - 50 + i);
+  const years = Array.from({
+    length: 100
+  }, (_, i) => currentYear - 50 + i);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!docId.trim()) {
@@ -82,10 +67,9 @@ const RequestDate = () => {
     setIsPopupOpen(true);
     setIsLoading(true);
     setApiResponse(null);
-    
+
     // Format date as YYYY/MM/DD
     const formattedDate = format(date, 'yyyy/MM/dd');
-    
     try {
       const response = await fetch('https://api.dirolabs.com/v3/extract-balance', {
         method: 'POST',
@@ -163,30 +147,17 @@ const RequestDate = () => {
           <div className="flex flex-col items-center">
             <div className="w-full max-w-md p-6 border border-gray-200 rounded-lg shadow-sm bg-white">
               {!showWidget ? <>
-                  <h2 className="font-medium text-gray-800 mb-4 text-lg">Enter Doc ID & Select Date</h2>
+                  <h2 className="font-medium text-gray-800 mb-4 text-lg">Enter doc ID &amp; select date</h2>
                   <p className="text-gray-600 mb-6 text-sm leading-relaxed">Please enter the Doc ID and select the date to fetch the balance.</p>
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-2">
-                      <Input 
-                        type="text" 
-                        value={docId} 
-                        onChange={e => setDocId(e.target.value)} 
-                        placeholder="Enter Doc ID" 
-                        className={`h-12 ${error && !date ? "border-red-500" : "border-gray-300"}`} 
-                      />
+                      <Input type="text" value={docId} onChange={e => setDocId(e.target.value)} placeholder="Enter Doc ID" className={`h-12 ${error && !date ? "border-red-500" : "border-gray-300"}`} />
                     </div>
                     
                     <div className="space-y-2">
                       <Popover open={dateOpen} onOpenChange={setDateOpen}>
                         <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            className={cn(
-                              "w-full h-12 justify-start text-left font-normal border-gray-300 hover:border-gray-300 hover:bg-white",
-                              !date && "text-muted-foreground",
-                              error && !docId.trim() && "border-red-500"
-                            )}
-                          >
+                          <Button variant="outline" className={cn("w-full h-12 justify-start text-left font-normal border-gray-300 hover:border-gray-300 hover:bg-white", !date && "text-muted-foreground", error && !docId.trim() && "border-red-500")}>
                             <CalendarIcon className="mr-2 h-4 w-4" />
                             {date ? format(date, "PPP") : <span>Select a date</span>}
                           </Button>
@@ -199,11 +170,9 @@ const RequestDate = () => {
                                   <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  {months.map((month, index) => (
-                                    <SelectItem key={index} value={index.toString()}>
+                                  {months.map((month, index) => <SelectItem key={index} value={index.toString()}>
                                       {month}
-                                    </SelectItem>
-                                  ))}
+                                    </SelectItem>)}
                                 </SelectContent>
                               </Select>
                               
@@ -212,29 +181,19 @@ const RequestDate = () => {
                                   <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  {years.map((year) => (
-                                    <SelectItem key={year} value={year.toString()}>
+                                  {years.map(year => <SelectItem key={year} value={year.toString()}>
                                       {year}
-                                    </SelectItem>
-                                  ))}
+                                    </SelectItem>)}
                                 </SelectContent>
                               </Select>
                             </div>
                           </div>
-                          <Calendar
-                            mode="single"
-                            selected={date}
-                            onSelect={(selectedDate) => {
-                              setDate(selectedDate);
-                              if (selectedDate) {
-                                setDateOpen(false);
-                              }
-                            }}
-                            month={currentMonth}
-                            onMonthChange={setCurrentMonth}
-                            initialFocus
-                            className="p-3 pointer-events-auto"
-                          />
+                          <Calendar mode="single" selected={date} onSelect={selectedDate => {
+                        setDate(selectedDate);
+                        if (selectedDate) {
+                          setDateOpen(false);
+                        }
+                      }} month={currentMonth} onMonthChange={setCurrentMonth} initialFocus className="p-3 pointer-events-auto" />
                         </PopoverContent>
                       </Popover>
                       {error && <p className="text-red-500 text-sm">{error}</p>}
