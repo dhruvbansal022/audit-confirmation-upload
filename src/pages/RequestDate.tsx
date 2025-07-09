@@ -28,6 +28,7 @@ const RequestDate = () => {
   const [selectedDocId, setSelectedDocId] = useState("");
   const [docId, setDocId] = useState("");
   const [date, setDate] = useState<Date>();
+  const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
   const [dateOpen, setDateOpen] = useState(false);
   const [error, setError] = useState("");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -49,6 +50,24 @@ const RequestDate = () => {
     setSelectedDocId(submittedDocId);
     setShowWidget(true);
   };
+
+  const handleMonthChange = (monthIndex: string) => {
+    const newMonth = new Date(currentMonth.getFullYear(), parseInt(monthIndex), 1);
+    setCurrentMonth(newMonth);
+  };
+
+  const handleYearChange = (year: string) => {
+    const newMonth = new Date(parseInt(year), currentMonth.getMonth(), 1);
+    setCurrentMonth(newMonth);
+  };
+
+  const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 100 }, (_, i) => currentYear - 50 + i);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!docId.trim()) {
@@ -173,6 +192,35 @@ const RequestDate = () => {
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0" align="start">
+                          <div className="p-3 border-b">
+                            <div className="flex items-center justify-between gap-2">
+                              <Select value={currentMonth.getMonth().toString()} onValueChange={handleMonthChange}>
+                                <SelectTrigger className="w-32">
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {months.map((month, index) => (
+                                    <SelectItem key={index} value={index.toString()}>
+                                      {month}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              
+                              <Select value={currentMonth.getFullYear().toString()} onValueChange={handleYearChange}>
+                                <SelectTrigger className="w-20">
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {years.map((year) => (
+                                    <SelectItem key={year} value={year.toString()}>
+                                      {year}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </div>
                           <Calendar
                             mode="single"
                             selected={date}
@@ -182,6 +230,8 @@ const RequestDate = () => {
                                 setDateOpen(false);
                               }
                             }}
+                            month={currentMonth}
+                            onMonthChange={setCurrentMonth}
                             initialFocus
                             className="p-3 pointer-events-auto"
                           />
