@@ -36,11 +36,7 @@ const Index = () => {
           <div className="flex flex-col">
             <h1 className="font-semibold text-gray-800 mb-4 text-xl">Confirm your balance in real time </h1>
 
-            <p className="text-gray-600 mb-6 text-justify leading-relaxed">
-              To ensure a seamless Visa processing experience and reduce the risk of financial discrepancies, 
-              VFS Global requires applicants to verify their bank account statement. This step guarantees 
-              timely and accurate financial transactions related to your Visa application.
-            </p>
+            <p className="text-gray-600 mb-6 text-justify leading-relaxed">Streamline your audit process and eliminate delays by fetching your verified bank balance in real time. Our secure platform delivers instant, read-only access to the exact balance your auditor needs—no paperwork, no phone calls, no waiting.</p>
 
             <p className="text-gray-600 mb-6 text-justify leading-relaxed">
               VFS Global partners with{" "}
