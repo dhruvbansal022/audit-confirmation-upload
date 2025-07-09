@@ -121,9 +121,7 @@ const Status = () => {
             <div className="w-full max-w-md p-6 border border-gray-200 rounded-lg shadow-sm bg-white">
               {!showWidget ? <>
                   <h2 className="font-medium text-gray-800 mb-4 text-lg">Enter Doc ID</h2>
-                  <p className="text-gray-600 mb-6 text-sm leading-relaxed">
-                    Please enter your Doc ID to fetch your balance.
-                  </p>
+                  <p className="text-gray-600 mb-6 text-sm leading-relaxed">Please enter the Doc ID to fetch the balance.</p>
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-2">
                       <Input type="text" value={docId} onChange={e => setDocId(e.target.value)} placeholder="Enter Doc ID" className={`h-12 ${error ? "border-red-500" : "border-gray-300"}`} />
