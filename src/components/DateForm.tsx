@@ -25,6 +25,7 @@ const DateForm: React.FC<DateFormProps> = ({ onSubmit }) => {
   const [date, setDate] = useState<Date>();
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
   const [error, setError] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,6 +44,7 @@ const DateForm: React.FC<DateFormProps> = ({ onSubmit }) => {
     setDate(selectedDate);
     if (selectedDate) {
       setError('');
+      setIsOpen(false); // Auto-close calendar when date is selected
     }
   };
 
@@ -65,11 +67,29 @@ const DateForm: React.FC<DateFormProps> = ({ onSubmit }) => {
     }
     setCurrentMonth(newMonth);
   };
+
+  const handleMonthChange = (monthIndex: string) => {
+    const newMonth = new Date(currentMonth.getFullYear(), parseInt(monthIndex), 1);
+    setCurrentMonth(newMonth);
+  };
+
+  const handleYearChange = (year: string) => {
+    const newMonth = new Date(parseInt(year), currentMonth.getMonth(), 1);
+    setCurrentMonth(newMonth);
+  };
+
+  const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 100 }, (_, i) => currentYear - 50 + i);
   
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
-        <Popover>
+        <Popover open={isOpen} onOpenChange={setIsOpen}>
           <PopoverTrigger asChild>
             <Button
               variant="outline"
@@ -85,8 +105,8 @@ const DateForm: React.FC<DateFormProps> = ({ onSubmit }) => {
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
             <div className="p-4 border-b bg-gray-50">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-1">
+              <div className="flex items-center justify-between gap-4 mb-3">
+                <div className="flex items-center gap-2">
                   <Button
                     variant="ghost"
                     size="sm"
@@ -95,9 +115,18 @@ const DateForm: React.FC<DateFormProps> = ({ onSubmit }) => {
                   >
                     <ChevronLeft className="h-4 w-4" />
                   </Button>
-                  <span className="text-sm font-medium min-w-[80px] text-center">
-                    {format(currentMonth, "MMMM")}
-                  </span>
+                  <Select value={currentMonth.getMonth().toString()} onValueChange={handleMonthChange}>
+                    <SelectTrigger className="w-32 h-7 text-sm">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {months.map((month, index) => (
+                        <SelectItem key={index} value={index.toString()}>
+                          {month}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <Button
                     variant="ghost"
                     size="sm"
@@ -108,7 +137,7 @@ const DateForm: React.FC<DateFormProps> = ({ onSubmit }) => {
                   </Button>
                 </div>
                 
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-2">
                   <Button
                     variant="ghost"
                     size="sm"
@@ -117,9 +146,18 @@ const DateForm: React.FC<DateFormProps> = ({ onSubmit }) => {
                   >
                     <ChevronLeft className="h-4 w-4" />
                   </Button>
-                  <span className="text-sm font-medium min-w-[40px] text-center">
-                    {format(currentMonth, "yyyy")}
-                  </span>
+                  <Select value={currentMonth.getFullYear().toString()} onValueChange={handleYearChange}>
+                    <SelectTrigger className="w-20 h-7 text-sm">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {years.map((year) => (
+                        <SelectItem key={year} value={year.toString()}>
+                          {year}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <Button
                     variant="ghost"
                     size="sm"
