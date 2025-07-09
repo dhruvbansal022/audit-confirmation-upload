@@ -195,71 +195,113 @@ const Status = () => {
             </div>
           ) : apiResponse ? (
             <div className="space-y-4">
-              {/* Requested Date on top */}
-              {apiResponse.requestedDate && (
-                <div className="text-center py-3 bg-gray-50 rounded-lg">
-                  <span className="text-sm text-gray-600">Requested Date</span>
-                  <p className="text-lg font-semibold text-gray-800">{apiResponse.requestedDate}</p>
-                </div>
-              )}
-              
-              {/* Balance details table */}
-              <div className="border rounded-lg overflow-hidden">
-                <table className="w-full">
-                  <tbody className="divide-y divide-gray-200">
-                    {apiResponse.currency && (
-                      <tr>
-                        <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Currency</td>
-                        <td className="px-4 py-3 text-sm text-gray-800">{apiResponse.currency}</td>
-                      </tr>
+              {/* Extract data from the nested response structure */}
+              {(() => {
+                // Handle nested response structure like { "data": [{ "transactionData": {...}, "message": "..." }] }
+                const responseData = apiResponse.data?.[0] || apiResponse;
+                const transactionData = responseData.transactionData || responseData;
+                const message = responseData.message || apiResponse.message;
+                
+                return (
+                  <>
+                    {/* Requested Date on top */}
+                    {transactionData.requestedDate && (
+                      <div className="text-center py-3 bg-gray-50 rounded-lg">
+                        <span className="text-sm text-gray-600">Requested Date</span>
+                        <p className="text-lg font-semibold text-gray-800">{transactionData.requestedDate}</p>
+                      </div>
                     )}
-                    {apiResponse.accountNumber && (
-                      <tr>
-                        <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Account Number</td>
-                        <td className="px-4 py-3 text-sm text-gray-800">{apiResponse.accountNumber}</td>
-                      </tr>
-                    )}
-                    {apiResponse.confidence && (
-                      <tr>
-                        <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Confidence</td>
-                        <td className="px-4 py-3 text-sm">
-                          <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                            apiResponse.confidence === 'High' ? 'bg-green-100 text-green-800' :
-                            apiResponse.confidence === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-red-100 text-red-800'
-                          }`}>
-                            {apiResponse.confidence}
-                          </span>
-                        </td>
-                      </tr>
-                    )}
-                    {apiResponse.balanceOnDate !== undefined && (
-                      <tr>
-                        <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Balance on Date</td>
-                        <td className="px-4 py-3 text-sm font-semibold text-gray-800">
-                          {apiResponse.currency ? `${apiResponse.currency} ` : ''}
-                          {typeof apiResponse.balanceOnDate === 'number' ? 
-                            apiResponse.balanceOnDate.toLocaleString() : 
-                            apiResponse.balanceOnDate}
-                        </td>
-                      </tr>
-                    )}
-                    {apiResponse.message && (
-                      <tr>
-                        <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Status</td>
-                        <td className="px-4 py-3 text-sm">
-                          <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                            apiResponse.message === 'Success!' ? 'bg-green-100 text-green-800' :
-                            'bg-gray-100 text-gray-800'
-                          }`}>
-                            {apiResponse.message}
-                          </span>
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
+                    
+                    {/* Balance details table */}
+                    <div className="border rounded-lg overflow-hidden">
+                      <table className="w-full">
+                        <tbody className="divide-y divide-gray-200">
+                          {transactionData.currency && (
+                            <tr>
+                              <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Currency</td>
+                              <td className="px-4 py-3 text-sm text-gray-800">{transactionData.currency}</td>
+                            </tr>
+                          )}
+                          {transactionData.accountNumber && (
+                            <tr>
+                              <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Account Number</td>
+                              <td className="px-4 py-3 text-sm text-gray-800">{transactionData.accountNumber}</td>
+                            </tr>
+                          )}
+                          {transactionData.confidence && (
+                            <tr>
+                              <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Confidence</td>
+                              <td className="px-4 py-3 text-sm">
+                                <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                                  transactionData.confidence === 'High' ? 'bg-green-100 text-green-800' :
+                                  transactionData.confidence === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                                  'bg-red-100 text-red-800'
+                                }`}>
+                                  {transactionData.confidence}
+                                </span>
+                              </td>
+                            </tr>
+                          )}
+                          {transactionData.balanceOnDate !== undefined && (
+                            <tr>
+                              <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Balance on Date</td>
+                              <td className="px-4 py-3 text-sm font-semibold text-gray-800">
+                                {transactionData.currency ? `${transactionData.currency} ` : ''}
+                                {typeof transactionData.balanceOnDate === 'number' ? 
+                                  transactionData.balanceOnDate.toLocaleString() : 
+                                  transactionData.balanceOnDate}
+                              </td>
+                            </tr>
+                          )}
+                          {message && (
+                            <tr>
+                              <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Message</td>
+                              <td className="px-4 py-3 text-sm">
+                                <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                                  message === 'Success!' ? 'bg-green-100 text-green-800' :
+                                  message.includes('not present') ? 'bg-yellow-100 text-yellow-800' :
+                                  'bg-gray-100 text-gray-800'
+                                }`}>
+                                  {message}
+                                </span>
+                              </td>
+                            </tr>
+                          )}
+                          
+                          {/* Show any additional fields that might be in the response */}
+                          {Object.entries(transactionData).map(([key, value]) => {
+                            // Skip already displayed fields
+                            if (['requestedDate', 'currency', 'accountNumber', 'confidence', 'balanceOnDate'].includes(key)) {
+                              return null;
+                            }
+                            if (value !== undefined && value !== null && value !== '') {
+                              return (
+                                <tr key={key}>
+                                  <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50 capitalize">
+                                    {key.replace(/([A-Z])/g, ' $1').toLowerCase()}
+                                  </td>
+                                  <td className="px-4 py-3 text-sm text-gray-800">
+                                    {typeof value === 'object' ? JSON.stringify(value) : String(value)}
+                                  </td>
+                                </tr>
+                              );
+                            }
+                            return null;
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    {/* Debug section - show raw response */}
+                    <details className="mt-4">
+                      <summary className="text-xs text-gray-500 cursor-pointer">Show raw response</summary>
+                      <pre className="mt-2 p-3 bg-gray-100 rounded text-xs overflow-auto">
+                        {JSON.stringify(apiResponse, null, 2)}
+                      </pre>
+                    </details>
+                  </>
+                );
+              })()}
             </div>
           ) : null}
         </DialogContent>
