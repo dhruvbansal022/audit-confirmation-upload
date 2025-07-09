@@ -83,8 +83,8 @@ const RequestDate = () => {
     setIsLoading(true);
     setApiResponse(null);
     
-    // Format date as YYYYMMDD
-    const formattedDate = format(date, 'yyyyMMdd');
+    // Format date as YYYY/MM/DD
+    const formattedDate = format(date, 'yyyy/MM/dd');
     
     try {
       const response = await fetch('https://api.dirolabs.com/v3/extract-balance', {
