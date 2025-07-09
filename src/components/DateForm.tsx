@@ -46,23 +46,25 @@ const DateForm: React.FC<DateFormProps> = ({ onSubmit }) => {
     }
   };
 
-  const handleMonthChange = (monthIndex: string) => {
-    const newMonth = new Date(currentMonth.getFullYear(), parseInt(monthIndex), 1);
+  const navigateMonth = (direction: 'prev' | 'next') => {
+    const newMonth = new Date(currentMonth);
+    if (direction === 'prev') {
+      newMonth.setMonth(currentMonth.getMonth() - 1);
+    } else {
+      newMonth.setMonth(currentMonth.getMonth() + 1);
+    }
     setCurrentMonth(newMonth);
   };
 
-  const handleYearChange = (year: string) => {
-    const newMonth = new Date(parseInt(year), currentMonth.getMonth(), 1);
+  const navigateYear = (direction: 'prev' | 'next') => {
+    const newMonth = new Date(currentMonth);
+    if (direction === 'prev') {
+      newMonth.setFullYear(currentMonth.getFullYear() - 1);
+    } else {
+      newMonth.setFullYear(currentMonth.getFullYear() + 1);
+    }
     setCurrentMonth(newMonth);
   };
-
-  const months = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ];
-
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 100 }, (_, i) => currentYear - 50 + i);
   
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -82,33 +84,51 @@ const DateForm: React.FC<DateFormProps> = ({ onSubmit }) => {
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
-            <div className="p-3 border-b">
-              <div className="flex items-center justify-between gap-2">
-                <Select value={currentMonth.getMonth().toString()} onValueChange={handleMonthChange}>
-                  <SelectTrigger className="w-32">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {months.map((month, index) => (
-                      <SelectItem key={index} value={index.toString()}>
-                        {month}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+            <div className="p-4 border-b bg-gray-50">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-1">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => navigateMonth('prev')}
+                    className="h-7 w-7 p-0 hover:bg-gray-200"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </Button>
+                  <span className="text-sm font-medium min-w-[80px] text-center">
+                    {format(currentMonth, "MMMM")}
+                  </span>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => navigateMonth('next')}
+                    className="h-7 w-7 p-0 hover:bg-gray-200"
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </div>
                 
-                <Select value={currentMonth.getFullYear().toString()} onValueChange={handleYearChange}>
-                  <SelectTrigger className="w-20">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {years.map((year) => (
-                      <SelectItem key={year} value={year.toString()}>
-                        {year}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <div className="flex items-center gap-1">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => navigateYear('prev')}
+                    className="h-7 w-7 p-0 hover:bg-gray-200"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </Button>
+                  <span className="text-sm font-medium min-w-[40px] text-center">
+                    {format(currentMonth, "yyyy")}
+                  </span>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => navigateYear('next')}
+                    className="h-7 w-7 p-0 hover:bg-gray-200"
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
             </div>
             <Calendar
@@ -119,6 +139,9 @@ const DateForm: React.FC<DateFormProps> = ({ onSubmit }) => {
               onMonthChange={setCurrentMonth}
               initialFocus
               className="p-3 pointer-events-auto"
+              classNames={{
+                nav_button: "hidden", // Hide default navigation buttons since we have our own
+              }}
             />
           </PopoverContent>
         </Popover>
