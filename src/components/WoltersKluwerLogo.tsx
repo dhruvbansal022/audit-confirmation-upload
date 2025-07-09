@@ -1,9 +1,10 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const WoltersKluwerLogo = () => {
   return (
-    <div className="flex items-center">
+    <Link to="/" className="flex items-center">
       <img 
         src="/lovable-uploads/13725959-f7a8-41ca-83b5-465fa83b76e6.png" 
         alt="Wolters Kluwer Logo"
@@ -13,7 +14,7 @@ const WoltersKluwerLogo = () => {
           e.currentTarget.style.display = 'none';
         }}
       />
-    </div>
+    </Link>
   );
 };
 
