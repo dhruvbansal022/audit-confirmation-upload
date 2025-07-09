@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Loader2 } from "lucide-react";
+import { format, parse } from "date-fns";
 
 const Status = () => {
   const [searchParams] = useSearchParams();
@@ -202,13 +203,26 @@ const Status = () => {
                 const transactionData = responseData.transactionData || responseData;
                 const message = responseData.message || apiResponse.message;
                 
+                // Format the requested date
+                const formatRequestedDate = (dateStr: string) => {
+                  try {
+                    // Parse the date in YYYY/MM/DD format
+                    const parsedDate = parse(dateStr, 'yyyy/MM/dd', new Date());
+                    // Format it as "Month DDth, YYYY"
+                    return format(parsedDate, 'MMMM do, yyyy');
+                  } catch (error) {
+                    // If parsing fails, return the original string
+                    return dateStr;
+                  }
+                };
+                
                 return (
                   <>
                     {/* Requested Date on top */}
                     {transactionData.requestedDate && (
                       <div className="text-center py-3 bg-gray-50 rounded-lg">
                         <span className="text-sm text-gray-600">Requested Date</span>
-                        <p className="text-lg font-semibold text-gray-800">{transactionData.requestedDate}</p>
+                        <p className="text-lg font-semibold text-gray-800">{formatRequestedDate(transactionData.requestedDate)}</p>
                       </div>
                     )}
                     
