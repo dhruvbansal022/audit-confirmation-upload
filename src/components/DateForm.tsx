@@ -25,6 +25,7 @@ const DateForm: React.FC<DateFormProps> = ({ onSubmit }) => {
   const [date, setDate] = useState<Date>();
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
   const [error, setError] = useState('');
+  const [open, setOpen] = useState(false);
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,6 +44,7 @@ const DateForm: React.FC<DateFormProps> = ({ onSubmit }) => {
     setDate(selectedDate);
     if (selectedDate) {
       setError('');
+      setOpen(false); // Auto-close the calendar
     }
   };
 
@@ -67,7 +69,7 @@ const DateForm: React.FC<DateFormProps> = ({ onSubmit }) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
-        <Popover>
+        <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button
               variant="outline"
