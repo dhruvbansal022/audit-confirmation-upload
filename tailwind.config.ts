@@ -64,7 +64,7 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				vfs: {
-					blue: '#1a407a',
+					blue: '#007AC3',
 					lightblue: '#2196f3',
 				},
 				meta: {

@@ -5,8 +5,8 @@ const VfsLogo = () => {
   return (
     <div className="flex items-center">
       <img 
-        src="/lovable-uploads/9af7edee-16ef-4d1f-8085-866e5b83b3c3.png" 
-        alt="VFS Global Logo" 
+        src="/lovable-uploads/13725959-f7a8-41ca-83b5-465fa83b76e6.png" 
+        alt="Wolters Kluwer Logo"
         className="h-14 w-auto" 
         onError={(e) => {
           console.log("Logo failed to load");
