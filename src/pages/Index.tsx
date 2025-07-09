@@ -74,7 +74,7 @@ const Index = () => {
           <div className="flex flex-col items-center">
             <div className="w-full max-w-md p-6 border border-gray-200 rounded-lg shadow-sm bg-white">
               {!showWidget ? <>
-                  <h2 className="font-medium text-gray-800 mb-4 text-lg">Select verification date</h2>
+                  <h2 className="font-medium text-gray-800 mb-4 text-lg">Select balance date</h2>
                   <p className="text-gray-600 mb-6 text-sm leading-relaxed">
                     Please select the date for which you want to verify your bank balance.
                   </p>
