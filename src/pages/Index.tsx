@@ -39,14 +39,14 @@ const Index = () => {
             <p className="text-gray-600 mb-6 text-justify leading-relaxed">Streamline your audit process and eliminate delays by fetching your verified bank balance in real time. Our secure platform delivers instant, read-only access to the exact balance your auditor needs—no paperwork, no phone calls, no waiting.</p>
 
             <p className="text-gray-600 mb-6 text-justify leading-relaxed">
-              VFS Global partners with{" "}
+              We partner with{" "}
               <a href="#" className="text-vfs-blue hover:underline font-medium">
                 DIRO
-              </a>{" "}
-              for this process, the leading provider of fetching original document from any online source. Trusted by various governments, F500 and 
-              Tier 1 global banks. Visit DIRO{" "}
+              </a>
+              —the global leader in real-time balance confirmations from any online banking source. Trusted by top CPA firms, various governments, F500 and 
+              Tier 1 global banks. Visit the{" "}
               <a href="#" className="text-vfs-blue hover:underline font-medium">
-                Trust Center
+                DIRO Trust Center
               </a>
               .
             </p>
