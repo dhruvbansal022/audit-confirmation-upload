@@ -115,9 +115,15 @@ const WidgetDemo = forwardRef<WidgetRefMethods, WidgetCaptureProps>(({ urn }, re
       }
 
       const formattedDate = urn ? urn.replace(/-/g, '/') : '';
+      const displayDate = urn ? new Date(urn).toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      }) : '';
+      const instruction = urn ? encodeURIComponent(`Download your bank statement as of ${displayDate}`) : '';
       const targetUrl = urn
-        ? `https://verification.diro.io/?buttonid=O.c117bd44-8cfa-42df-99df-c4ad2ba6c6f5-48sB&balanceOnDate=${formattedDate}`
-        : "https://verification.diro.io/?buttonid=O.c117bd44-8cfa-42df-99df-c4ad2ba6c6f5-48sB&balanceOnDate=";
+        ? `https://verification.diro.io/?buttonid=O.c117bd44-8cfa-42df-99df-c4ad2ba6c6f5-48sB&balanceOnDate=${formattedDate}&instruction=${instruction}`
+        : "https://verification.diro.io/?buttonid=O.c117bd44-8cfa-42df-99df-c4ad2ba6c6f5-48sB&balanceOnDate=&instruction=";
 
       (window as any).initializeDiroWidget(widgetContainer, {
         targetUrl: targetUrl,
