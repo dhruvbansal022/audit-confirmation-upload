@@ -1,7 +1,7 @@
 
 import React from 'react';
 
-const VfsLogo = () => {
+const WoltersKluwerLogo = () => {
   return (
     <div className="flex items-center">
       <img 
@@ -17,4 +17,4 @@ const VfsLogo = () => {
   );
 };
 
-export default VfsLogo;
+export default WoltersKluwerLogo;

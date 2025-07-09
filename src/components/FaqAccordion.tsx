@@ -9,8 +9,8 @@ const FaqAccordion = () => {
         <AccordionItem value="item-1">
           <AccordionTrigger className="text-left font-medium">What information will be shared?</AccordionTrigger>
           <AccordionContent className="text-gray-600 leading-relaxed">
-            Only the necessary financial information required for visa processing verification will be shared. 
-            VFS Global follows strict data protection protocols and your personal banking details remain secure 
+            Only the account number and balance information required for audit compliance will be shared. 
+            Wolters Kluwer follows strict data protection protocols and your personal banking details remain secure 
             throughout the verification process.
           </AccordionContent>
         </AccordionItem>
@@ -18,8 +18,8 @@ const FaqAccordion = () => {
         <AccordionItem value="item-2">
           <AccordionTrigger className="text-left font-medium">How does my password remain private?</AccordionTrigger>
           <AccordionContent className="text-gray-600 leading-relaxed">
-            Your banking passwords and credentials are never stored or accessed by VFS Global. DIRO's secure 
-            verification process uses bank-level encryption and connects directly with your financial institution 
+            Your banking passwords and credentials are never stored or accessed by Wolters Kluwer. DIRO's secure 
+            verification process uses bank-level encryption and connects directly with your financial institution
             without exposing your login credentials.
           </AccordionContent>
         </AccordionItem>

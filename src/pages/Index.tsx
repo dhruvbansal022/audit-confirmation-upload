@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import VfsLogo from "../components/VfsLogo";
+import WoltersKluwerLogo from "../components/WoltersKluwerLogo";
 import DateForm from "../components/DateForm";
 import FaqAccordion from "../components/FaqAccordion";
 import WidgetCapture from "./widgetCapture";
@@ -27,7 +27,7 @@ const Index = () => {
   return <div className="min-h-screen bg-gray-50">
       <header className="border-b border-gray-200 py-4 bg-white">
         <div className="container mx-auto px-4">
-          <VfsLogo />
+          <WoltersKluwerLogo />
         </div>
       </header>
 

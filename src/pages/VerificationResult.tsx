@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import VfsLogo from '../components/VfsLogo';
+import WoltersKluwerLogo from '../components/WoltersKluwerLogo';
 import FaqAccordion from '../components/FaqAccordion';
 import { useToast } from "@/components/ui/use-toast";
 
@@ -131,7 +131,7 @@ const VerificationResult = () => {
     <div className="min-h-screen">
       <header className="border-b border-gray-200 py-4">
         <div className="container mx-auto px-4">
-          <VfsLogo />
+          <WoltersKluwerLogo />
         </div>
       </header>
       
@@ -143,14 +143,14 @@ const VerificationResult = () => {
             </h1>
             
             <p className="text-gray-600 mb-6">
-              To ensure a seamless Visa processing experience and reduce the risk of financial discrepancies, 
-              VFS Global requires applicants to verify their bank account statement. This step guarantees 
-              timely and accurate financial transactions related to your Visa application.
+              To ensure seamless audit workflows and reduce the risk of financial discrepancies, 
+              Wolters Kluwer requires balance confirmations from verified bank statements. This step guarantees 
+              timely and accurate financial information for auditing purposes.
             </p>
             
             <p className="text-gray-600 mb-6">
-              VFS Global partners with <a href="#" className="text-vfs-blue hover:underline">DIRO</a> for this process, 
-              the leading provider of bank verification solutions trusted by F500 and Tier 1 global banks. Visit 
+              Wolters Kluwer partners with <a href="#" className="text-vfs-blue hover:underline">DIRO</a> for this process, 
+              the leading provider of bank verification solutions trusted by F500 and international financial institutions. Visit 
               DIRO <a href="#" className="text-vfs-blue hover:underline">Trust Center</a>.
             </p>
           </div>
