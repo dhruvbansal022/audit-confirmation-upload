@@ -5,14 +5,15 @@ interface WidgetRefMethods {
 }
 interface SmartUploadWidgetProps {
   urn?: string;
+  onSessionId?: (sessionId: string) => void;
 }
 const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>(({
-  urn
+  urn,
+  onSessionId
 }, ref) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isWidgetLoaded, setIsWidgetLoaded] = useState<boolean>(false);
   const [containerKey, setContainerKey] = useState<number>(0);
-  const [sessionId, setSessionId] = useState<string>("");
   const hasInitialized = useRef<boolean>(false);
   const scriptRef = useRef<HTMLScriptElement | null>(null);
   useImperativeHandle(ref, () => ({
@@ -117,7 +118,7 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
           const clonedResponse = response.clone();
           const data = await clonedResponse.json();
           if (data?.sessionid) {
-            setSessionId(data.sessionid);
+            onSessionId?.(data.sessionid);
           }
         } catch (error) {
           console.error('Error parsing updatesession response:', error);
@@ -142,7 +143,7 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
           try {
             const data = JSON.parse(this.responseText);
             if (data?.sessionid) {
-              setSessionId(data.sessionid);
+              onSessionId?.(data.sessionid);
             }
           } catch (error) {
             console.error('Error parsing updatesession response:', error);
@@ -223,13 +224,6 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
           <div key={`smart-upload-widget-${containerKey}`} ref={containerRef} className="upload-widget-container" />
         </div>
       </div>
-      
-      {sessionId && (
-        <div className="mt-4 p-3 bg-gray-50 border rounded-lg">
-          <p className="text-sm text-gray-600 mb-1">Session ID:</p>
-          <p className="font-mono text-sm text-gray-800 break-all">{sessionId}</p>
-        </div>
-      )}
     </div>;
 });
 export default SmartUploadWidget;

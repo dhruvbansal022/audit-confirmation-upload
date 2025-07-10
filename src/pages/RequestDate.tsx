@@ -40,6 +40,9 @@ const RequestDate = () => {
     setSelectedDocId(submittedDocId);
     setShowWidget(true);
   };
+  const handleSessionId = (sessionId: string) => {
+    setDocId(sessionId);
+  };
   const handleMonthChange = (monthIndex: string) => {
     const newMonth = new Date(currentMonth.getFullYear(), parseInt(monthIndex), 1);
     setCurrentMonth(newMonth);
@@ -145,7 +148,7 @@ const RequestDate = () => {
           </div>
           
           <div>
-            <SmartUploadWidget />
+            <SmartUploadWidget onSessionId={handleSessionId} />
           </div>
 
           <div className="flex flex-col items-center">
