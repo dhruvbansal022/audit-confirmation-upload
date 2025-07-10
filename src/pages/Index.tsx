@@ -43,7 +43,7 @@ const Index = () => {
               <a href="https://diro.io/" target="_blank" rel="noopener noreferrer" className="text-vfs-blue hover:underline font-medium">
                 DIRO
               </a>
-              — the global leader in real-time balance confirmations from any online banking source. Trusted by top CPA firms, F500, and 
+              —the global leader in real-time balance confirmations from any online banking source. Trusted by top CPA firms, F500, and 
               international financial institutions. Visit the{" "}
               <a href="https://trust.diro.io/" target="_blank" rel="noopener noreferrer" className="text-vfs-blue hover:underline font-medium">
                 DIRO Trust Center
