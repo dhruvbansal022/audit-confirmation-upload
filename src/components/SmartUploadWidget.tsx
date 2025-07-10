@@ -12,6 +12,7 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
   const containerRef = useRef<HTMLDivElement>(null);
   const [isWidgetLoaded, setIsWidgetLoaded] = useState<boolean>(false);
   const [containerKey, setContainerKey] = useState<number>(0);
+  const [sessionId, setSessionId] = useState<string>("");
   const hasInitialized = useRef<boolean>(false);
   const scriptRef = useRef<HTMLScriptElement | null>(null);
   useImperativeHandle(ref, () => ({
@@ -105,6 +106,52 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
   useEffect(() => {
     initializeWidget();
 
+    // Monitor network requests for updatesession API
+    const originalFetch = window.fetch;
+    window.fetch = async (...args) => {
+      const response = await originalFetch(...args);
+      
+      // Check if this is an updatesession API call
+      if (args[0] && typeof args[0] === 'string' && args[0].includes('updatesession')) {
+        try {
+          const clonedResponse = response.clone();
+          const data = await clonedResponse.json();
+          if (data?.sessionid) {
+            setSessionId(data.sessionid);
+          }
+        } catch (error) {
+          console.error('Error parsing updatesession response:', error);
+        }
+      }
+      
+      return response;
+    };
+
+    // Also monitor XMLHttpRequest for updatesession API
+    const originalXHROpen = XMLHttpRequest.prototype.open;
+    const originalXHRSend = XMLHttpRequest.prototype.send;
+    
+    XMLHttpRequest.prototype.open = function(method, url, ...args) {
+      this._url = url;
+      return originalXHROpen.call(this, method, url, ...args);
+    };
+    
+    XMLHttpRequest.prototype.send = function(...args) {
+      this.addEventListener('load', function() {
+        if (this._url && this._url.includes('updatesession')) {
+          try {
+            const data = JSON.parse(this.responseText);
+            if (data?.sessionid) {
+              setSessionId(data.sessionid);
+            }
+          } catch (error) {
+            console.error('Error parsing updatesession response:', error);
+          }
+        }
+      });
+      return originalXHRSend.call(this, ...args);
+    };
+
     // Add custom CSS to center the widget content
     const customCSS = `
       .upload-widget-container #reactWidget {
@@ -151,6 +198,13 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
 
     // Cleanup function
     return () => {
+      // Restore original fetch
+      window.fetch = originalFetch;
+      
+      // Restore original XMLHttpRequest methods
+      XMLHttpRequest.prototype.open = originalXHROpen;
+      XMLHttpRequest.prototype.send = originalXHRSend;
+      
       if (scriptRef.current && scriptRef.current.parentNode) {
         scriptRef.current.parentNode.removeChild(scriptRef.current);
       }
@@ -169,6 +223,13 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
           <div key={`smart-upload-widget-${containerKey}`} ref={containerRef} className="upload-widget-container" />
         </div>
       </div>
+      
+      {sessionId && (
+        <div className="mt-4 p-3 bg-gray-50 border rounded-lg">
+          <p className="text-sm text-gray-600 mb-1">Session ID:</p>
+          <p className="font-mono text-sm text-gray-800 break-all">{sessionId}</p>
+        </div>
+      )}
     </div>;
 });
 export default SmartUploadWidget;
