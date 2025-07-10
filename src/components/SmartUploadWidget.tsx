@@ -113,7 +113,7 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
     };
   }, [containerKey, urn]);
   return <div className="w-full max-w-md p-6 border border-gray-200 rounded-lg shadow-sm bg-white">
-      <h2 className="font-medium text-gray-800 mb-4 text-lg">Upload your bank statement</h2>
+      
       
       <div className="smart-upload-widget">
         {!isWidgetLoaded && <div className="widget-loading p-4 text-center">Loading Diro widget...</div>}
