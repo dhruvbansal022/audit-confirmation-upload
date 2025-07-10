@@ -144,6 +144,10 @@ const RequestDate = () => {
             </div>
           </div>
           
+          <div>
+            <SmartUploadWidget />
+          </div>
+
           <div className="flex flex-col items-center">
             <div className="w-full max-w-md p-6 border border-gray-200 rounded-lg shadow-sm bg-white">
               {!showWidget ? <>
@@ -211,10 +215,6 @@ const RequestDate = () => {
                   </div>
                 </>}
             </div>
-          </div>
-
-          <div>
-            <SmartUploadWidget />
           </div>
         </div>
       </main>
