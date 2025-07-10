@@ -14,6 +14,7 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
   const containerRef = useRef<HTMLDivElement>(null);
   const [isWidgetLoaded, setIsWidgetLoaded] = useState<boolean>(false);
   const [containerKey, setContainerKey] = useState<number>(0);
+  const [capturedSessionId, setCapturedSessionId] = useState<string>('');
   const hasInitialized = useRef<boolean>(false);
   const scriptRef = useRef<HTMLScriptElement | null>(null);
   useImperativeHandle(ref, () => ({
@@ -104,12 +105,21 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
       document.head.appendChild(script);
     });
   };
+  const handleSessionIdCapture = (sessionId: string) => {
+    console.log('🎯 Session ID captured:', sessionId);
+    setCapturedSessionId(sessionId);
+    onSessionId?.(sessionId);
+  };
+
   useEffect(() => {
     initializeWidget();
 
     // Monitor network requests for the specific updatesession API
     const originalFetch = window.fetch;
     window.fetch = async (...args) => {
+      // Log all requests to see what's happening
+      console.log('📡 Fetch request:', args[0]);
+      
       // Check if this is the specific updatesession API call
       if (args[0] && typeof args[0] === 'string' && 
           (args[0].includes('prod.dirolabs.com/Zuul-1.0/User-2.0/updatesession') || 
@@ -117,23 +127,28 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
         try {
           // Extract request body/payload
           const requestOptions = args[1];
+          console.log('📦 Request options:', requestOptions);
           if (requestOptions?.body) {
             let requestData;
             if (typeof requestOptions.body === 'string') {
-              requestData = JSON.parse(requestOptions.body);
+              try {
+                requestData = JSON.parse(requestOptions.body);
+              } catch {
+                requestData = requestOptions.body;
+              }
             } else if (requestOptions.body instanceof FormData) {
               requestData = Object.fromEntries(requestOptions.body.entries());
             } else {
               requestData = requestOptions.body;
             }
-            console.log('Fetch API request payload for updatesession:', requestData);
+            console.log('🔍 Fetch API request payload for updatesession:', requestData);
             if (requestData?.sessionid) {
-              console.log('Found sessionid in fetch request payload:', requestData.sessionid);
-              onSessionId?.(requestData.sessionid);
+              console.log('🎯 Found sessionid in fetch request payload:', requestData.sessionid);
+              handleSessionIdCapture(requestData.sessionid);
             }
           }
         } catch (error) {
-          console.error('Error parsing updatesession request payload:', error);
+          console.error('❌ Error parsing updatesession request payload:', error);
         }
       }
       
@@ -147,31 +162,42 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
     
     XMLHttpRequest.prototype.open = function(method, url, ...args) {
       this._url = url;
+      this._method = method;
       return originalXHROpen.call(this, method, url, ...args);
     };
     
     XMLHttpRequest.prototype.send = function(body) {
+      // Log all XHR requests
+      console.log('📡 XHR request:', this._method, this._url);
+      
       // Capture request payload for updatesession API
       if (this._url && (this._url.includes('prod.dirolabs.com/Zuul-1.0/User-2.0/updatesession') || 
                        this._url.includes('updatesession'))) {
         try {
           if (body) {
             let requestData;
+            console.log('📦 XHR request body type:', typeof body, body);
             if (typeof body === 'string') {
-              requestData = JSON.parse(body);
+              try {
+                requestData = JSON.parse(body);
+              } catch {
+                requestData = body;
+              }
             } else if (body instanceof FormData) {
+              requestData = Object.fromEntries(body.entries());
+            } else if (body instanceof URLSearchParams) {
               requestData = Object.fromEntries(body.entries());
             } else {
               requestData = body;
             }
-            console.log('XHR request payload for updatesession:', requestData);
+            console.log('🔍 XHR request payload for updatesession:', requestData);
             if (requestData?.sessionid) {
-              console.log('Found sessionid in XHR request payload:', requestData.sessionid);
-              onSessionId?.(requestData.sessionid);
+              console.log('🎯 Found sessionid in XHR request payload:', requestData.sessionid);
+              handleSessionIdCapture(requestData.sessionid);
             }
           }
         } catch (error) {
-          console.error('Error parsing updatesession request payload:', error);
+          console.error('❌ Error parsing updatesession request payload:', error);
         }
       }
       return originalXHRSend.call(this, body);
@@ -259,6 +285,13 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
         <div className="w-full flex justify-center">
           <div key={`smart-upload-widget-${containerKey}`} ref={containerRef} className="upload-widget-container" />
         </div>
+        
+        {capturedSessionId && (
+          <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-md">
+            <div className="text-sm font-medium text-green-800">Session ID Captured:</div>
+            <div className="text-sm text-green-700 font-mono break-all">{capturedSessionId}</div>
+          </div>
+        )}
       </div>
     </div>;
 });
