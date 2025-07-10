@@ -81,17 +81,22 @@ const Index = () => {
                   <DateForm onSubmit={handleDateSubmit} />
                 </> : <>
                   <h2 className="font-medium text-gray-800 mb-4 text-lg">
-                    Confirm balance for {new Date(selectedDate).toLocaleDateString('en-US', { 
-                      year: 'numeric', 
-                      month: 'long', 
-                      day: 'numeric' 
-                    }).replace(/(\d+),/, (match, day) => {
-                      const dayNum = parseInt(day);
-                      const suffix = dayNum === 1 || dayNum === 21 || dayNum === 31 ? 'st' :
-                                   dayNum === 2 || dayNum === 22 ? 'nd' :
-                                   dayNum === 3 || dayNum === 23 ? 'rd' : 'th';
-                      return `${day}${suffix},`;
-                    })}
+                    Confirm balance for {(() => {
+                      // Parse date as local date to avoid timezone shifts
+                      const dateParts = selectedDate.split('-');
+                      const localDate = new Date(parseInt(dateParts[0]), parseInt(dateParts[1]) - 1, parseInt(dateParts[2]));
+                      return localDate.toLocaleDateString('en-US', { 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                      }).replace(/(\d+),/, (match, day) => {
+                        const dayNum = parseInt(day);
+                        const suffix = dayNum === 1 || dayNum === 21 || dayNum === 31 ? 'st' :
+                                     dayNum === 2 || dayNum === 22 ? 'nd' :
+                                     dayNum === 3 || dayNum === 23 ? 'rd' : 'th';
+                        return `${day}${suffix},`;
+                      });
+                    })()}
                   </h2>
                   <p className="text-gray-600 mb-6 text-sm leading-relaxed">Please select your bank to proceed.</p>
                   <div className="flex flex-col align-center gap-4">
