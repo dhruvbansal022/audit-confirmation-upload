@@ -105,15 +105,65 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
   useEffect(() => {
     initializeWidget();
 
+    // Add custom CSS to center the widget content
+    const customCSS = `
+      .upload-widget-container #reactWidget {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        text-align: center !important;
+      }
+      
+      .upload-widget-container #reactWidget * {
+        text-align: center !important;
+      }
+      
+      .upload-widget-container .diro-upload-area,
+      .upload-widget-container [class*="upload"],
+      .upload-widget-container [class*="drop"] {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        text-align: center !important;
+      }
+      
+      .upload-widget-container .upload-icon,
+      .upload-widget-container .cloud-icon,
+      .upload-widget-container [class*="icon"],
+      .upload-widget-container svg {
+        margin: 0 auto !important;
+        display: block !important;
+      }
+    `;
+
+    const styleElement = document.createElement('style');
+    styleElement.textContent = customCSS;
+    styleElement.id = 'diro-widget-custom-styles';
+    
+    // Remove existing custom styles if any
+    const existingStyles = document.getElementById('diro-widget-custom-styles');
+    if (existingStyles) {
+      existingStyles.remove();
+    }
+    
+    document.head.appendChild(styleElement);
+
     // Cleanup function
     return () => {
       if (scriptRef.current && scriptRef.current.parentNode) {
         scriptRef.current.parentNode.removeChild(scriptRef.current);
       }
+      // Remove custom styles
+      const customStyles = document.getElementById('diro-widget-custom-styles');
+      if (customStyles) {
+        customStyles.remove();
+      }
     };
   }, [containerKey, urn]);
   return <div className="w-full max-w-md p-6 border border-gray-200 rounded-lg shadow-sm bg-white">
-      
+      <h2 className="font-medium text-gray-800 mb-4 text-lg">Upload your bank statement</h2>
+      <p className="text-gray-600 mb-6 text-sm leading-relaxed">Please upload your bank statement to proceed with balance verification.</p>
       
       <div className="smart-upload-widget">
         {!isWidgetLoaded && <div className="widget-loading p-4 text-center">Loading Diro widget...</div>}
