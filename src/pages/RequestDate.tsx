@@ -284,10 +284,10 @@ const RequestDate = () => {
                               </td>
                             </tr>}
                           {message && <tr>
-                              <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Message</td>
+                              <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Status</td>
                               <td className="px-4 py-3 text-sm">
                                 <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${message === 'Success!' ? 'bg-green-100 text-green-800' : message.includes('not present') ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800'}`}>
-                                  Status
+                                  {message}
                                 </span>
                               </td>
                             </tr>}
