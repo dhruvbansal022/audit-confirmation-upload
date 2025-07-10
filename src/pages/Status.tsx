@@ -205,14 +205,6 @@ const Status = () => {
                               <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Account number</td>
                               <td className="px-4 py-3 text-sm text-gray-800">{transactionData.accountNumber}</td>
                             </tr>}
-                          {transactionData.confidence && <tr>
-                              <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Confidence</td>
-                              <td className="px-4 py-3 text-sm">
-                                <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${transactionData.confidence === 'High' ? 'bg-green-100 text-green-800' : transactionData.confidence === 'Medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}`}>
-                                  {transactionData.confidence}
-                                </span>
-                              </td>
-                            </tr>}
                           {transactionData.balanceOnDate !== undefined && <tr>
                               <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Balance on date</td>
                               <td className="px-4 py-3 text-sm font-semibold text-gray-800">
@@ -220,11 +212,11 @@ const Status = () => {
                                 {typeof transactionData.balanceOnDate === 'number' ? transactionData.balanceOnDate.toLocaleString() : transactionData.balanceOnDate}
                               </td>
                             </tr>}
-                          {message && <tr>
+                           {message && <tr>
                               <td className="px-4 py-3 text-sm font-medium text-gray-600 bg-gray-50">Message</td>
                               <td className="px-4 py-3 text-sm">
                                 <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${message === 'Success!' ? 'bg-green-100 text-green-800' : message.includes('not present') ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800'}`}>
-                                  {message}
+                                  Status
                                 </span>
                               </td>
                             </tr>}
@@ -251,14 +243,6 @@ const Status = () => {
                                           {account.currency && <tr>
                                               <td className="px-3 py-2 text-xs font-medium text-gray-500 bg-gray-25">Currency</td>
                                               <td className="px-3 py-2 text-xs text-gray-700">{account.currency}</td>
-                                            </tr>}
-                                          {account.confidence && <tr>
-                                              <td className="px-3 py-2 text-xs font-medium text-gray-500 bg-gray-25">Confidence</td>
-                                              <td className="px-3 py-2 text-xs">
-                                                <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${account.confidence === 'High' ? 'bg-green-100 text-green-800' : account.confidence === 'Medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}`}>
-                                                  {account.confidence}
-                                                </span>
-                                              </td>
                                             </tr>}
                                         </tbody>
                                       </table>
