@@ -285,13 +285,6 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
         <div className="w-full flex justify-center">
           <div key={`smart-upload-widget-${containerKey}`} ref={containerRef} className="upload-widget-container" />
         </div>
-        
-        {capturedSessionId && (
-          <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-md">
-            <div className="text-sm font-medium text-green-800">Session ID Captured:</div>
-            <div className="text-sm text-green-700 font-mono break-all">{capturedSessionId}</div>
-          </div>
-        )}
       </div>
     </div>;
 });
