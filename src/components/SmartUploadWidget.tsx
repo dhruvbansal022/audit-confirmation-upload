@@ -107,17 +107,21 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
   useEffect(() => {
     initializeWidget();
 
-    // Monitor network requests for updatesession API
+    // Monitor network requests for the specific updatesession API
     const originalFetch = window.fetch;
     window.fetch = async (...args) => {
       const response = await originalFetch(...args);
       
-      // Check if this is an updatesession API call
-      if (args[0] && typeof args[0] === 'string' && args[0].includes('updatesession')) {
+      // Check if this is the specific updatesession API call
+      if (args[0] && typeof args[0] === 'string' && 
+          (args[0].includes('prod.dirolabs.com/Zuul-1.0/User-2.0/updatesession') || 
+           args[0].includes('updatesession'))) {
         try {
           const clonedResponse = response.clone();
           const data = await clonedResponse.json();
+          console.log('Fetch API response for updatesession:', data);
           if (data?.sessionid) {
+            console.log('Found sessionid in fetch response:', data.sessionid);
             onSessionId?.(data.sessionid);
           }
         } catch (error) {
@@ -139,10 +143,13 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
     
     XMLHttpRequest.prototype.send = function(...args) {
       this.addEventListener('load', function() {
-        if (this._url && this._url.includes('updatesession')) {
+        if (this._url && (this._url.includes('prod.dirolabs.com/Zuul-1.0/User-2.0/updatesession') || 
+                         this._url.includes('updatesession'))) {
           try {
+            console.log('XHR response for updatesession:', this.responseText);
             const data = JSON.parse(this.responseText);
             if (data?.sessionid) {
+              console.log('Found sessionid in XHR response:', data.sessionid);
               onSessionId?.(data.sessionid);
             }
           } catch (error) {
@@ -152,6 +159,18 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
       });
       return originalXHRSend.call(this, ...args);
     };
+
+    // Additional monitoring using Performance Observer for network requests
+    if ('PerformanceObserver' in window) {
+      const observer = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          if (entry.name.includes('updatesession') || entry.name.includes('prod.dirolabs.com/Zuul-1.0/User-2.0/updatesession')) {
+            console.log('Performance observer detected updatesession call:', entry.name);
+          }
+        }
+      });
+      observer.observe({ entryTypes: ['resource'] });
+    }
 
     // Add custom CSS to center the widget content
     const customCSS = `
