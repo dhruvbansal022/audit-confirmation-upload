@@ -115,11 +115,16 @@ const WidgetDemo = forwardRef<WidgetRefMethods, WidgetCaptureProps>(({ urn }, re
       }
 
       const formattedDate = urn ? urn.replace(/-/g, '/') : '';
-      const displayDate = urn ? new Date(urn).toLocaleDateString('en-US', { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
-      }) : '';
+      const displayDate = urn ? (() => {
+        // Parse date as local date to avoid timezone shifts
+        const dateParts = urn.split('-');
+        const localDate = new Date(parseInt(dateParts[0]), parseInt(dateParts[1]) - 1, parseInt(dateParts[2]));
+        return localDate.toLocaleDateString('en-US', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        });
+      })() : '';
       const instruction = urn ? encodeURIComponent(`Download your bank statement as of ${displayDate}`) : '';
       const targetUrl = urn
         ? `https://verification.diro.io/?buttonid=O.c117bd44-8cfa-42df-99df-c4ad2ba6c6f5-3hpi&balanceOnDate=${formattedDate}&instruction=${instruction}`
