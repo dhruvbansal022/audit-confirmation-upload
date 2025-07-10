@@ -110,25 +110,34 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
     // Monitor network requests for the specific updatesession API
     const originalFetch = window.fetch;
     window.fetch = async (...args) => {
-      const response = await originalFetch(...args);
-      
       // Check if this is the specific updatesession API call
       if (args[0] && typeof args[0] === 'string' && 
           (args[0].includes('prod.dirolabs.com/Zuul-1.0/User-2.0/updatesession') || 
            args[0].includes('updatesession'))) {
         try {
-          const clonedResponse = response.clone();
-          const data = await clonedResponse.json();
-          console.log('Fetch API response for updatesession:', data);
-          if (data?.sessionid) {
-            console.log('Found sessionid in fetch response:', data.sessionid);
-            onSessionId?.(data.sessionid);
+          // Extract request body/payload
+          const requestOptions = args[1];
+          if (requestOptions?.body) {
+            let requestData;
+            if (typeof requestOptions.body === 'string') {
+              requestData = JSON.parse(requestOptions.body);
+            } else if (requestOptions.body instanceof FormData) {
+              requestData = Object.fromEntries(requestOptions.body.entries());
+            } else {
+              requestData = requestOptions.body;
+            }
+            console.log('Fetch API request payload for updatesession:', requestData);
+            if (requestData?.sessionid) {
+              console.log('Found sessionid in fetch request payload:', requestData.sessionid);
+              onSessionId?.(requestData.sessionid);
+            }
           }
         } catch (error) {
-          console.error('Error parsing updatesession response:', error);
+          console.error('Error parsing updatesession request payload:', error);
         }
       }
       
+      const response = await originalFetch(...args);
       return response;
     };
 
@@ -141,23 +150,31 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
       return originalXHROpen.call(this, method, url, ...args);
     };
     
-    XMLHttpRequest.prototype.send = function(...args) {
-      this.addEventListener('load', function() {
-        if (this._url && (this._url.includes('prod.dirolabs.com/Zuul-1.0/User-2.0/updatesession') || 
-                         this._url.includes('updatesession'))) {
-          try {
-            console.log('XHR response for updatesession:', this.responseText);
-            const data = JSON.parse(this.responseText);
-            if (data?.sessionid) {
-              console.log('Found sessionid in XHR response:', data.sessionid);
-              onSessionId?.(data.sessionid);
+    XMLHttpRequest.prototype.send = function(body) {
+      // Capture request payload for updatesession API
+      if (this._url && (this._url.includes('prod.dirolabs.com/Zuul-1.0/User-2.0/updatesession') || 
+                       this._url.includes('updatesession'))) {
+        try {
+          if (body) {
+            let requestData;
+            if (typeof body === 'string') {
+              requestData = JSON.parse(body);
+            } else if (body instanceof FormData) {
+              requestData = Object.fromEntries(body.entries());
+            } else {
+              requestData = body;
             }
-          } catch (error) {
-            console.error('Error parsing updatesession response:', error);
+            console.log('XHR request payload for updatesession:', requestData);
+            if (requestData?.sessionid) {
+              console.log('Found sessionid in XHR request payload:', requestData.sessionid);
+              onSessionId?.(requestData.sessionid);
+            }
           }
+        } catch (error) {
+          console.error('Error parsing updatesession request payload:', error);
         }
-      });
-      return originalXHRSend.call(this, ...args);
+      }
+      return originalXHRSend.call(this, body);
     };
 
     // Additional monitoring using Performance Observer for network requests
