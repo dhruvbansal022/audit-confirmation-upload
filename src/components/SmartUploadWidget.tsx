@@ -82,7 +82,7 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
       width: "300px",
       themeColor: "black",
       fontFamily: "sans-serif",
-      fontSizeTitle: "20px",
+      fontSizeTitle: "16px",
       fontWeightTitle:"600",
       buttonHeight:"30px"
     }));
