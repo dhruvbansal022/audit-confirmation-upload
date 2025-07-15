@@ -215,7 +215,7 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
       observer.observe({ entryTypes: ['resource'] });
     }
 
-    // Add custom CSS to center the widget content
+    // Add custom CSS to center the widget content and override font weight
     const customCSS = `
       .upload-widget-container #reactWidget {
         display: flex !important;
@@ -224,8 +224,10 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
         text-align: center !important;
       }
       
-      .upload-widget-container #reactWidget * {
+      .upload-widget-container #reactWidget *,
+      .upload-widget-container * {
         text-align: center !important;
+        font-weight: 300 !important;
       }
       
       .upload-widget-container .diro-upload-area,
@@ -236,6 +238,7 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
         justify-content: center !important;
         align-items: center !important;
         text-align: center !important;
+        font-weight: 300 !important;
       }
       
       .upload-widget-container .upload-icon,
