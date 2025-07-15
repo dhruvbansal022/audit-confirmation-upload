@@ -76,7 +76,7 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
     widgetDiv.id = "reactWidget";
     widgetDiv.setAttribute("data-buttonid", "O.c117bd44-8cfa-42df-99df-c4ad2ba6c6f5-F6je");
     widgetDiv.setAttribute("data-trackid", urn || "");
-    widgetDiv.setAttribute("wrapper", '{ "height": "350px", "width": "350px", "themeColor":"black", "fontFamily":"sans-serif", "fontSize":"12px", "fontWeight":"300" }');
+    widgetDiv.setAttribute("wrapper", '{ "height": "350px", "width": "350px", "themeColor":"black", "fontFamily":"sans-serif", "fontSize":"12px", "fontWeight":"500" }');
 
     // Append the widget div to the container
     containerRef.current.appendChild(widgetDiv);
@@ -227,7 +227,7 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
       .upload-widget-container #reactWidget *,
       .upload-widget-container * {
         text-align: center !important;
-        font-weight: 300 !important;
+        font-weight: 500 !important;
       }
       
       .upload-widget-container .diro-upload-area,
@@ -238,7 +238,7 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
         justify-content: center !important;
         align-items: center !important;
         text-align: center !important;
-        font-weight: 300 !important;
+        font-weight: 500 !important;
       }
       
       .upload-widget-container .upload-icon,
