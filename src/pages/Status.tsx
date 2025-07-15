@@ -48,8 +48,8 @@ const Status = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': '1bfd958aabcec0f6c3bd5dfa47fc3c88',
-          'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkaHJ1ditkZW1vQGRpcm8uaW8iLCJhcGlrZXkiOiIxYmZkOTU4YWFiY2VjMGY2YzNiZDVkZmE0N2ZjM2M4OCJ9.K6J2BhY2g6rCdEDfgeF1KSbaoSKb7jwUFoOjkpM8oGRrLbFYvUTlBD2wpISjmBK_1-0EFAqwp5PjWPjI6x_HQw'
+          'x-api-key': '7c78fb55194729ad81da94097e9add32',
+          'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkaHJ1dkBkaXJvLmlvIiwiYXBpa2V5IjoiN2M3OGZiNTUxOTQ3MjlhZDgxZGE5NDA5N2U5YWRkMzIifQ.SmdG9VZX1m5Ejk8Rn9H0cdb3IQznnmRZEisuG779kqi_y7kV0ERG83LtmSQkDvHAw-2oM9z5bpmA6bojz4W7BQ'
         },
         body: JSON.stringify({
           docid: docId,
