@@ -283,7 +283,7 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
   }, [containerKey, urn]);
   return <div className="w-full max-w-md p-6 border border-gray-200 rounded-lg shadow-sm bg-white">
       <div className="smart-upload-widget">
-        {!isWidgetLoaded && <div className="widget-loading p-4 text-center">Loading Diro widget...</div>}
+        {!isWidgetLoaded && <div className="widget-loading p-4 text-center">Starting DIRO verification...</div>}
 
         <div className="w-full flex justify-center">
           <div key={`smart-upload-widget-${containerKey}`} ref={containerRef} className="upload-widget-container" />
