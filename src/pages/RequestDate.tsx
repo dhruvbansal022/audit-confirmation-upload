@@ -6,6 +6,7 @@ import WidgetCapture from "./widgetCapture";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Loader2, CalendarIcon } from "lucide-react";
 import { format, parse } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
@@ -351,9 +352,13 @@ const RequestDate = () => {
                     {/* Debug section - show raw response */}
                     <details className="mt-4">
                       <summary className="text-xs text-gray-500 cursor-pointer">Show raw response</summary>
-                      <pre className="mt-2 p-3 bg-gray-100 rounded text-xs overflow-auto">
-                        {JSON.stringify(apiResponse, null, 2)}
-                      </pre>
+                      <div className="mt-2 border rounded bg-gray-100">
+                        <ScrollArea className="h-48">
+                          <pre className="p-3 text-xs whitespace-pre-wrap break-words">
+                            {JSON.stringify(apiResponse, null, 2)}
+                          </pre>
+                        </ScrollArea>
+                      </div>
                     </details>
                   </>;
           })()}
