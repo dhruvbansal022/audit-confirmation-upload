@@ -255,15 +255,15 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
       }
     `;
 
-  //  const styleElement = document.createElement('style');
-   // styleElement.textContent = customCSS;
-   // styleElement.id = 'diro-widget-custom-styles';
+    const styleElement = document.createElement('style');
+    styleElement.textContent = customCSS;
+    styleElement.id = 'diro-widget-custom-styles';
     
     // Remove existing custom styles if any
- //   const existingStyles = document.getElementById('diro-widget-custom-styles');
-   // if (existingStyles) {
-     // existingStyles.remove();
-    //}
+    const existingStyles = document.getElementById('diro-widget-custom-styles');
+    if (existingStyles) {
+      existingStyles.remove();
+    }
     
     document.head.appendChild(styleElement);
 
