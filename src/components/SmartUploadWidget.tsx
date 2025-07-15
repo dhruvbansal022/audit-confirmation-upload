@@ -76,7 +76,7 @@ const SmartUploadWidget = forwardRef<WidgetRefMethods, SmartUploadWidgetProps>((
     widgetDiv.id = "reactWidget";
     widgetDiv.setAttribute("data-buttonid", "O.c117bd44-8cfa-42df-99df-c4ad2ba6c6f5-F6je");
     widgetDiv.setAttribute("data-trackid", urn || "");
-    widgetDiv.setAttribute("wrapper", '{ "height": "350px", "width": "350px", "themeColor":"black", "fontFamily":"Montserrat", "fontSize":"12px" }');
+    widgetDiv.setAttribute("wrapper", '{ "height": "350px", "width": "350px", "themeColor":"black", "fontFamily":"sans-serif", "fontSize":"12px" }');
 
     // Append the widget div to the container
     containerRef.current.appendChild(widgetDiv);
