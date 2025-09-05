@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Status from "./pages/Status";
 import RequestDate from "./pages/RequestDate";
+import Balance from "./pages/Balance";
 import VerificationResult from "./pages/VerificationResult";
 import NotFound from "./pages/NotFound";
 // We will not import the App.css file as it may be causing styling conflicts
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/status" element={<Status />} />
           <Route path="/request-date" element={<RequestDate />} />
+          <Route path="/balance" element={<Balance />} />
           <Route path="/verification-result" element={<VerificationResult />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
