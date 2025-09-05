@@ -31,10 +31,8 @@ export const PdfUpload: React.FC<PdfUploadProps> = ({ onFileUpload }) => {
       // Step 1: Call Smart Feedback API
       const formData = new FormData();
       formData.append('buttonid', 'O.c117bd44-8cfa-42df-99df-c4ad2ba6c6f5-F6je');
-      formData.append('pdffile', file);
-      formData.append('warn_cases', JSON.stringify({
-        "trackid1": "sessionid"
-      }));
+      formData.append('pdffile', file, file.name);
+      formData.append('warn_cases', '{"trackid1": "sessionid"}');
 
       const smartFeedbackResponse = await fetch('https://api.diro.io/textract/smartFeedback', {
         method: 'POST',
