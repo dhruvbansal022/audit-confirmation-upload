@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Upload, FileText, X } from 'lucide-react';
+import { Upload, FileText, X, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface PdfUploadProps {
@@ -9,6 +9,8 @@ interface PdfUploadProps {
 export const PdfUpload: React.FC<PdfUploadProps> = ({ onFileUpload }) => {
   const [isDragOver, setIsDragOver] = useState(false);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [status, setStatus] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -21,6 +23,71 @@ export const PdfUpload: React.FC<PdfUploadProps> = ({ onFileUpload }) => {
     setIsDragOver(false);
   };
 
+  const processFile = async (file: File) => {
+    setIsProcessing(true);
+    setStatus('Uploading file...');
+    
+    try {
+      // Step 1: Call Smart Feedback API
+      const formData = new FormData();
+      formData.append('buttonid', 'O.c117bd44-8cfa-42df-99df-c4ad2ba6c6f5-F6je');
+      formData.append('pdffile', file);
+      formData.append('warn_cases', JSON.stringify({
+        "trackid1": ""
+      }));
+
+      const smartFeedbackResponse = await fetch('https://api.diro.io/textract/smartFeedback', {
+        method: 'POST',
+        headers: {
+          'x-api-key': '1bfd958aabcec0f6c3bd5dfa47fc3c88',
+          'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkaHJ1ditkZW1vQGRpcm8uaW8iLCJhcGlrZXkiOiIxYmZkOTU4YWFiY2VjMGY2YzNiZDVkZmE0N2ZjM2M4OCJ9.K6J2BhY2g6rCdEDfgeF1KSbaoSKb7jwUFoOjkpM8oGRrLbFYvUTlBD2wpISjmBK_1-0EFAqwp5PjWPjI6x_HQw'
+        },
+        body: formData
+      });
+
+      if (!smartFeedbackResponse.ok) {
+        throw new Error('Smart Feedback API failed');
+      }
+
+      const smartFeedbackData = await smartFeedbackResponse.json();
+      const docId = smartFeedbackData.docid;
+
+      if (!docId) {
+        throw new Error('No docid received from Smart Feedback API');
+      }
+
+      setStatus('Processing document...');
+
+      // Step 2: Call Smart Upload API
+      const smartUploadResponse = await fetch('https://api.dirolabs.com/v3/smartUpload', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': '1bfd958aabcec0f6c3bd5dfa47fc3c88',
+          'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkaHJ1ditkZW1vQGRpcm8uaW8iLCJhcGlrZXkiOiIxYmZkOTU4YWFiY2VjMGY2YzNiZDVkZmE0N2ZjM2M4OCJ9.K6J2BhY2g6rCdEDfgeF1KSbaoSKb7jwUFoOjkpM8oGRrLbFYvUTlBD2wpISjmBK_1-0EFAqwp5PjWPjI6x_HQw'
+        },
+        body: JSON.stringify({
+          docid: docId
+        })
+      });
+
+      if (!smartUploadResponse.ok) {
+        throw new Error('Smart Upload API failed');
+      }
+
+      const smartUploadData = await smartUploadResponse.json();
+      setStatus('Document processed successfully!');
+      
+      console.log('Smart Upload Response:', smartUploadData);
+      
+    } catch (error) {
+      console.error('Error processing file:', error);
+      setStatus('Error processing document. Please try again.');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragOver(false);
@@ -31,6 +98,7 @@ export const PdfUpload: React.FC<PdfUploadProps> = ({ onFileUpload }) => {
     if (pdfFile) {
       setUploadedFile(pdfFile);
       onFileUpload(pdfFile);
+      processFile(pdfFile);
     }
   };
 
@@ -39,6 +107,7 @@ export const PdfUpload: React.FC<PdfUploadProps> = ({ onFileUpload }) => {
     if (file && file.type === 'application/pdf') {
       setUploadedFile(file);
       onFileUpload(file);
+      processFile(file);
     }
   };
 
@@ -108,6 +177,19 @@ export const PdfUpload: React.FC<PdfUploadProps> = ({ onFileUpload }) => {
               <X className="h-4 w-4" />
             </Button>
           </div>
+        </div>
+      )}
+      
+      {isProcessing && (
+        <div className="mt-4 flex items-center space-x-2 text-blue-600">
+          <Loader2 className="h-4 w-4 animate-spin" />
+          <span className="text-sm">{status}</span>
+        </div>
+      )}
+      
+      {status && !isProcessing && (
+        <div className={`mt-4 text-sm ${status.includes('Error') ? 'text-red-600' : 'text-green-600'}`}>
+          {status}
         </div>
       )}
     </div>
