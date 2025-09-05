@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import WoltersKluwerLogo from "../components/WoltersKluwerLogo";
-import SmartUploadWidget from "../components/SmartUploadWidget";
+import { PdfUpload } from "../components/PdfUpload";
 import WidgetCapture from "./widgetCapture";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -45,8 +45,9 @@ const Balance = () => {
     setShowWidget(true);
   };
 
-  const handleSessionId = (sessionId: string) => {
-    setDocId(sessionId);
+  const handleFileUpload = (file: File) => {
+    console.log("PDF file uploaded:", file.name);
+    // File handling logic will be added in next steps
   };
 
   const handleMonthChange = (monthIndex: string) => {
@@ -158,7 +159,7 @@ const Balance = () => {
           </div>
           
           <div>
-            <SmartUploadWidget onSessionId={handleSessionId} />
+            <PdfUpload onFileUpload={handleFileUpload} />
           </div>
 
           <div className="flex flex-col items-center">
